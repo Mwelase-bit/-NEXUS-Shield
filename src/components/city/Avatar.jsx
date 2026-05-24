@@ -3,6 +3,11 @@ import { useFrame } from '@react-three/fiber';
 import { Html, Sparkles } from '@react-three/drei';
 import * as THREE from 'three';
 
+/**
+ * Humanoid avatar — low-poly but clearly human.
+ * Wears a cybersecurity analyst outfit with headset + wrist device.
+ * Walking animation via sine-wave limb oscillation.
+ */
 export default function Avatar({
   rotationY = 0,
   isMoving = false,
@@ -16,250 +21,182 @@ export default function Avatar({
   const rightLeg = useRef();
   const leftArm = useRef();
   const rightArm = useRef();
-  const body = useRef();
-  const lightRef = useRef();
-  const droneRef = useRef();
-  const torsoRingsRef = useRef();
+  const bodyGroup = useRef();
+  const headGroup = useRef();
+  const auraLight = useRef();
+  const breathRef = useRef(0);
 
   const rankId = rank?.id ?? 1;
-  const hasHeadset = rankId >= 2;
-  const hasTactical = rankId >= 3;
-  const hasVisor = rankId >= 4;
-  const hasCommand = rankId >= 5;
-  const hasElite = rankId >= 6;
+  const suitDark = '#1A2C3E';
+  const suitMid = '#243444';
+  const skinColor = '#E8C49A';
+  const hairColor = '#1A0A00';
 
-  const suitColor = hasElite ? '#0B131E' : hasCommand ? '#14273E' : '#0B1B2C';
-  const trimColor = auraColor;
-
-  useFrame(({ clock }) => {
+  useFrame(({ clock }, delta) => {
     const t = clock.elapsedTime;
-    const walkSpeed = isMoving ? 11 : 0;
-    
-    // Smooth procedural locomotion rigging
+    breathRef.current += delta;
+
+    const walkSpeed = isMoving ? 9 : 0;
     const swing = isMoving ? Math.sin(t * walkSpeed) * 0.5 : 0;
-    const bob = isMoving ? Math.abs(Math.sin(t * walkSpeed)) * 0.08 : Math.sin(t * 1.6) * 0.025;
-    
-    // Leg/arm swings
-    if (leftLeg.current) leftLeg.current.rotation.x = swing;
+    // Idle breath / weight shift
+    const idleSway = isMoving ? 0 : Math.sin(t * 1.4) * 0.012;
+    const idleBob  = isMoving ? Math.abs(Math.sin(t * walkSpeed)) * 0.07
+                               : Math.sin(t * 1.4) * 0.018;
+
+    if (leftLeg.current)  leftLeg.current.rotation.x  = swing;
     if (rightLeg.current) rightLeg.current.rotation.x = -swing;
-    if (leftArm.current) leftArm.current.rotation.x = -swing * 0.65;
-    if (rightArm.current) rightArm.current.rotation.x = swing * 0.65;
-    
-    // Body bobbing and tilting
-    if (body.current) {
-      body.current.position.y = 0.95 + bob;
-      body.current.rotation.z = isMoving ? Math.sin(t * walkSpeed) * 0.04 : 0;
-      body.current.rotation.y = isMoving ? Math.sin(t * walkSpeed * 0.5) * 0.03 : 0;
+    if (leftArm.current)  leftArm.current.rotation.x  = -swing * 0.65;
+    if (rightArm.current) rightArm.current.rotation.x =  swing * 0.65;
+
+    if (bodyGroup.current) {
+      bodyGroup.current.position.y = 0.92 + idleBob;
+      bodyGroup.current.rotation.z = idleSway;
     }
-    
+    if (headGroup.current) {
+      headGroup.current.rotation.y = isMoving ? 0 : Math.sin(t * 0.7) * 0.06;
+    }
     if (group.current) group.current.rotation.y = rotationY;
-    if (lightRef.current) lightRef.current.intensity = isMoving ? 1.5 : 0.8;
-
-    // Hover Companion Sentinel Drone orbital coordinates
-    if (droneRef.current) {
-      const droneRadius = 0.72;
-      const droneSpeed = 2.2;
-      droneRef.current.position.x = Math.sin(t * droneSpeed) * droneRadius;
-      droneRef.current.position.z = Math.cos(t * droneSpeed) * droneRadius - 0.1;
-      droneRef.current.position.y = 1.55 + Math.sin(t * 3.5) * 0.06;
-      droneRef.current.rotation.y = t * 4;
-    }
-
-    // Orbitting tactical chest rings
-    if (torsoRingsRef.current) {
-      torsoRingsRef.current.rotation.y = t * 2.0;
-      torsoRingsRef.current.rotation.x = t * 0.6;
-    }
+    if (auraLight.current) auraLight.current.intensity = isMoving ? 1.4 : 0.7;
   });
 
-  const shadowCast = { castShadow: true, receiveShadow: false };
+  const sc = { castShadow: true };
 
   return (
     <group ref={group} scale={scale}>
-      <pointLight ref={lightRef} position={[0, 1.5, 0.4]} color={auraColor} intensity={0.9} distance={6} />
+      {/* Rank-colored point light — player illuminates surroundings */}
+      <pointLight ref={auraLight} position={[0, 1.4, 0.3]} color={auraColor} intensity={0.8} distance={5} />
 
-      {/* Dynamic Thruster / Foot Sparkles during active walking */}
+      {/* Footstep sparkles when moving */}
       {isMoving && (
-        <>
-          <Sparkles count={16} scale={[0.6, 0.4, 0.6]} size={1.8} speed={2.5} color={auraColor} position={[0, 0.25, -0.4]} />
-          {/* Thruster exhaust under boots */}
-          <mesh position={[-0.14, 0.08, -0.1]}>
-            <coneGeometry args={[0.08, 0.24, 6]} />
-            <meshBasicMaterial color={auraColor} transparent opacity={0.6} />
-          </mesh>
-          <mesh position={[0.14, 0.08, -0.1]}>
-            <coneGeometry args={[0.08, 0.24, 6]} />
-            <meshBasicMaterial color={auraColor} transparent opacity={0.6} />
-          </mesh>
-        </>
+        <Sparkles count={10} scale={[0.5, 0.3, 0.5]} size={1.2} speed={2.5} color={auraColor} position={[0, 0.2, -0.3]} />
       )}
 
-      {/* Double Holographic Ground Decal Decal */}
+      {/* Aura ground ring */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.02, 0]}>
-        <ringGeometry args={[0.42, 0.72, 32]} />
+        <ringGeometry args={[0.4, 0.68, 32]} />
         <meshBasicMaterial color={auraColor} transparent opacity={0.55} side={THREE.DoubleSide} />
       </mesh>
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.03, 0]}>
-        <ringGeometry args={[0.72, 0.92, 32]} />
-        <meshBasicMaterial color={auraColor} transparent opacity={0.18} side={THREE.DoubleSide} />
-      </mesh>
 
-      {/* Left Leg */}
-      <group ref={leftLeg} position={[-0.14, 0.42, 0]}>
-        <mesh position={[0, -0.2, 0]} {...shadowCast}>
-          <boxGeometry args={[0.14, 0.42, 0.16]} />
-          <meshStandardMaterial color={suitColor} emissive={trimColor} emissiveIntensity={0.2} metalness={0.4} roughness={0.3} />
+      {/* ── LEGS ── */}
+      <group ref={leftLeg} position={[-0.13, 0.45, 0]}>
+        <mesh position={[0, -0.19, 0]} {...sc}>
+          <boxGeometry args={[0.14, 0.42, 0.15]} />
+          <meshStandardMaterial color={suitDark} metalness={0.2} roughness={0.7} />
         </mesh>
-        <mesh position={[0, -0.48, 0.04]} {...shadowCast}>
-          <boxGeometry args={[0.16, 0.1, 0.22]} />
-          <meshStandardMaterial color="#02050A" emissive={trimColor} emissiveIntensity={hasCommand ? 1.0 : 0.4} />
+        {/* Boot */}
+        <mesh position={[0, -0.46, 0.03]} {...sc}>
+          <boxGeometry args={[0.16, 0.09, 0.21]} />
+          <meshStandardMaterial color="#050A14" emissive={auraColor} emissiveIntensity={0.4} />
         </mesh>
       </group>
 
-      {/* Right Leg */}
-      <group ref={rightLeg} position={[0.14, 0.42, 0]}>
-        <mesh position={[0, -0.2, 0]} {...shadowCast}>
-          <boxGeometry args={[0.14, 0.42, 0.16]} />
-          <meshStandardMaterial color={suitColor} emissive={trimColor} emissiveIntensity={0.2} metalness={0.4} roughness={0.3} />
+      <group ref={rightLeg} position={[0.13, 0.45, 0]}>
+        <mesh position={[0, -0.19, 0]} {...sc}>
+          <boxGeometry args={[0.14, 0.42, 0.15]} />
+          <meshStandardMaterial color={suitDark} metalness={0.2} roughness={0.7} />
         </mesh>
-        <mesh position={[0, -0.48, 0.04]} {...shadowCast}>
-          <boxGeometry args={[0.16, 0.1, 0.22]} />
-          <meshStandardMaterial color="#02050A" emissive={trimColor} emissiveIntensity={hasCommand ? 1.0 : 0.4} />
+        <mesh position={[0, -0.46, 0.03]} {...sc}>
+          <boxGeometry args={[0.16, 0.09, 0.21]} />
+          <meshStandardMaterial color="#050A14" emissive={auraColor} emissiveIntensity={0.4} />
         </mesh>
       </group>
 
-      {/* Main Torso Body */}
-      <group ref={body} position={[0, 0.95, 0]}>
-        <mesh {...shadowCast}>
-          <boxGeometry args={[0.42, 0.55, 0.28]} />
-          <meshStandardMaterial color={suitColor} metalness={0.65} roughness={0.25} emissive={trimColor} emissiveIntensity={0.2} />
-        </mesh>
-        
-        {/* Core Chest Power Matrix Decal */}
-        <mesh position={[0, 0.05, 0.16]} {...shadowCast}>
-          <boxGeometry args={[0.22, 0.28, 0.04]} />
-          <meshStandardMaterial color="#02050A" emissive={trimColor} emissiveIntensity={hasTactical ? 1.8 : 0.8} />
+      {/* ── BODY GROUP (bobs up/down) ── */}
+      <group ref={bodyGroup} position={[0, 0.92, 0]}>
+
+        {/* Torso */}
+        <mesh {...sc}>
+          <boxGeometry args={[0.44, 0.58, 0.29]} />
+          <meshStandardMaterial color={suitMid} metalness={0.3} roughness={0.65} emissive={auraColor} emissiveIntensity={0.07} />
         </mesh>
 
-        {/* Orbiting Chest Gyro-Rings */}
-        <group ref={torsoRingsRef} position={[0, 0.05, 0]}>
-          <mesh>
-            <torusGeometry args={[0.34, 0.02, 6, 24]} />
-            <meshBasicMaterial color={auraColor} transparent opacity={hasTactical ? 0.75 : 0.3} />
+        {/* Chest screen/device */}
+        <mesh position={[0, 0.06, 0.155]}>
+          <boxGeometry args={[0.2, 0.24, 0.03]} />
+          <meshStandardMaterial color="#000C18" emissive={auraColor} emissiveIntensity={rankId >= 3 ? 1.6 : 0.9} />
+        </mesh>
+
+        {/* Shoulder epaulettes */}
+        {[-0.25, 0.25].map((x, i) => (
+          <mesh key={i} position={[x, 0.32, 0]}>
+            <boxGeometry args={[0.12, 0.07, 0.32]} />
+            <meshStandardMaterial color={auraColor} emissive={auraColor} emissiveIntensity={0.7} />
+          </mesh>
+        ))}
+
+        {/* ── LEFT ARM ── */}
+        <group ref={leftArm} position={[-0.31, 0.1, 0]}>
+          <mesh position={[0, -0.19, 0]} {...sc}>
+            <boxGeometry args={[0.12, 0.4, 0.14]} />
+            <meshStandardMaterial color={suitDark} metalness={0.2} roughness={0.7} />
+          </mesh>
+          {/* Wrist device */}
+          <mesh position={[-0.01, -0.38, 0.05]}>
+            <boxGeometry args={[0.13, 0.07, 0.07]} />
+            <meshStandardMaterial color="#000C18" emissive="#00FFE5" emissiveIntensity={1.2} />
           </mesh>
         </group>
 
-        {hasTactical && (
-          <mesh position={[0, 0.08, -0.2]} {...shadowCast}>
-            <boxGeometry args={[0.35, 0.4, 0.12]} />
-            <meshStandardMaterial color="#14273E" emissive={trimColor} emissiveIntensity={0.7} />
+        {/* ── RIGHT ARM ── */}
+        <group ref={rightArm} position={[0.31, 0.1, 0]}>
+          <mesh position={[0, -0.19, 0]} {...sc}>
+            <boxGeometry args={[0.12, 0.4, 0.14]} />
+            <meshStandardMaterial color={suitDark} metalness={0.2} roughness={0.7} />
           </mesh>
-        )}
-        
-        {hasCommand && (
-          <mesh position={[0.28, 0.2, 0]}>
-            <boxGeometry args={[0.08, 0.12, 0.06]} />
-            <meshStandardMaterial color={trimColor} emissive={trimColor} emissiveIntensity={1.4} />
+        </group>
+
+        {/* ── HEAD ── */}
+        <group ref={headGroup} position={[0, 0.46, 0]}>
+          {/* Skull */}
+          <mesh {...sc}>
+            <boxGeometry args={[0.31, 0.33, 0.29]} />
+            <meshStandardMaterial color={skinColor} roughness={0.6} />
           </mesh>
-        )}
-        {hasElite && (
-          <mesh position={[-0.28, 0.2, 0]}>
-            <boxGeometry args={[0.08, 0.12, 0.06]} />
-            <meshStandardMaterial color="#00FFE5" emissive="#00FFE5" emissiveIntensity={1.8} />
+          {/* Hair / cap top */}
+          <mesh position={[0, 0.18, -0.02]}>
+            <boxGeometry args={[0.33, 0.1, 0.31]} />
+            <meshStandardMaterial color={hairColor} roughness={0.8} />
           </mesh>
-        )}
+          {/* Eyes */}
+          <mesh position={[-0.08, 0.04, 0.148]}>
+            <boxGeometry args={[0.06, 0.05, 0.02]} />
+            <meshStandardMaterial color="#1A3AFF" emissive="#1A3AFF" emissiveIntensity={0.5} />
+          </mesh>
+          <mesh position={[0.08, 0.04, 0.148]}>
+            <boxGeometry args={[0.06, 0.05, 0.02]} />
+            <meshStandardMaterial color="#1A3AFF" emissive="#1A3AFF" emissiveIntensity={0.5} />
+          </mesh>
+          {/* Headset band */}
+          <mesh position={[0, 0.05, 0]}>
+            <torusGeometry args={[0.22, 0.025, 6, 20, Math.PI]} />
+            <meshStandardMaterial color="#0A1826" metalness={0.8} />
+          </mesh>
+          {/* Headset mic arm */}
+          <mesh position={[0.22, 0.0, 0.06]} rotation={[0, 0, -0.4]}>
+            <cylinderGeometry args={[0.012, 0.012, 0.25, 6]} />
+            <meshStandardMaterial color="#0A1826" metalness={0.8} />
+          </mesh>
+          <mesh position={[0.26, -0.08, 0.1]}>
+            <sphereGeometry args={[0.025, 6, 6]} />
+            <meshStandardMaterial color={auraColor} emissive={auraColor} emissiveIntensity={2} />
+          </mesh>
+          {/* Visor (rank 4+) */}
+          {rankId >= 4 && (
+            <mesh position={[0, 0.0, 0.152]}>
+              <boxGeometry args={[0.3, 0.1, 0.03]} />
+              <meshStandardMaterial color={auraColor} emissive={auraColor} emissiveIntensity={1.8} transparent opacity={0.85} />
+            </mesh>
+          )}
+        </group>
       </group>
 
-      {/* Left Arm */}
-      <group ref={leftArm} position={[-0.3, 1.05, 0]}>
-        <mesh position={[0, -0.18, 0]} {...shadowCast}>
-          <boxGeometry args={[0.12, 0.38, 0.14]} />
-          <meshStandardMaterial color={suitColor} metalness={0.4} roughness={0.3} />
-        </mesh>
-        {/* Arm guard shield */}
-        {hasCommand && (
-          <mesh position={[-0.08, -0.1, 0.02]}>
-            <boxGeometry args={[0.04, 0.2, 0.1]} />
-            <meshStandardMaterial color={trimColor} emissive={trimColor} emissiveIntensity={0.8} />
-          </mesh>
-        )}
-      </group>
-
-      {/* Right Arm */}
-      <group ref={rightArm} position={[0.3, 1.05, 0]}>
-        <mesh position={[0, -0.18, 0]} {...shadowCast}>
-          <boxGeometry args={[0.12, 0.38, 0.14]} />
-          <meshStandardMaterial color={suitColor} metalness={0.4} roughness={0.3} />
-        </mesh>
-        {/* Arm guard shield */}
-        {hasCommand && (
-          <mesh position={[0.08, -0.1, 0.02]}>
-            <boxGeometry args={[0.04, 0.2, 0.1]} />
-            <meshStandardMaterial color={trimColor} emissive={trimColor} emissiveIntensity={0.8} />
-          </mesh>
-        )}
-      </group>
-
-      {/* Cybernetic Helmet / Head */}
-      <group position={[0, 1.38, 0]}>
-        <mesh {...shadowCast}>
-          <boxGeometry args={[0.32, 0.34, 0.3]} />
-          <meshStandardMaterial color="#EAF5FF" roughness={0.2} metalness={0.5} />
-        </mesh>
-        
-        {/* Visor shield */}
-        {hasVisor && (
-          <mesh position={[0, 0.02, 0.14]}>
-            <boxGeometry args={[0.34, 0.14, 0.06]} />
-            <meshStandardMaterial color={trimColor} emissive={trimColor} emissiveIntensity={1.8} transparent opacity={0.9} />
-          </mesh>
-        )}
-        
-        {hasHeadset && (
-          <mesh position={[0.18, 0, 0]}>
-            <boxGeometry args={[0.06, 0.14, 0.1]} />
-            <meshStandardMaterial emissive={trimColor} emissiveIntensity={0.8} color="#14273E" />
-          </mesh>
-        )}
-        
-        {hasElite && (
-          <mesh position={[0, 0.22, 0]}>
-            <boxGeometry args={[0.22, 0.06, 0.22]} />
-            <meshStandardMaterial color="#00FFE5" emissive="#00FFE5" emissiveIntensity={1.2} wireframe />
-          </mesh>
-        )}
-      </group>
-
-      {/* AWS Cloud Quest-style Hovering Companion Sentinel Drone */}
-      <group ref={droneRef}>
-        {/* Drone Core Spherical Body */}
-        <mesh castShadow>
-          <sphereGeometry args={[0.12, 12, 12]} />
-          <meshStandardMaterial color="#0D1B2A" metalness={0.95} roughness={0.1} />
-        </mesh>
-        {/* Outer Orbiting Horizontal Ring */}
-        <mesh rotation={[Math.PI / 2, 0, 0]}>
-          <torusGeometry args={[0.18, 0.02, 4, 16]} />
-          <meshBasicMaterial color={auraColor} transparent opacity={0.8} />
-        </mesh>
-        {/* Drone Engine Eye Lens (Emissive light) */}
-        <mesh position={[0, 0, 0.1]}>
-          <sphereGeometry args={[0.04, 8, 8]} />
-          <meshStandardMaterial color="#FFF" emissive={auraColor} emissiveIntensity={3} />
-        </mesh>
-        {/* Downward scanning light beam */}
-        <mesh position={[0, -0.4, 0]}>
-          <cylinderGeometry args={[0.02, 0.1, 0.8, 8]} />
-          <meshBasicMaterial color={auraColor} transparent opacity={0.35} />
-        </mesh>
-      </group>
-
-      {/* Clean Premium AWS Cloud Quest-style Nameplate */}
-      <Html position={[0, 2.2, 0]} center distanceFactor={14} style={{ pointerEvents: 'none' }}>
-        <div className={`player-nameplate ${isMoving ? 'moving' : ''}`}>
-          <div className="nameplate-crown" style={{ borderColor: auraColor }} />
+      {/* ── Floating rank badge above head ── */}
+      <Html position={[0, 2.15, 0]} center distanceFactor={14} style={{ pointerEvents: 'none' }}>
+        <div className={`player-nameplate ${isMoving ? 'moving' : ''}`} style={{ '--aura': auraColor }}>
+          <div className="nameplate-rank" style={{ background: auraColor }}>
+            {rank?.name?.slice(0, 3) || 'RKT'}
+          </div>
           <strong>{callsign}</strong>
-          <span style={{ color: auraColor }}>{rank?.name || 'Analyst'}</span>
         </div>
       </Html>
     </group>

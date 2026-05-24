@@ -3,52 +3,44 @@ import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 
 /**
- * Dynamic follow camera — pulls back when moving, subtle drift.
+ * Smooth isometric-style follow camera.
+ * Uses OrthographicCamera — set from the Canvas gl prop.
+ * Smooth lerp (0.05) follows the player.
  */
-export default function CityCamera({ targetRef, enabled = true, isMoving = false, shake = 0 }) {
+export default function CityCamera({ targetRef, enabled = true, shake = 0 }) {
   const { camera } = useThree();
-  const lookAt = useRef(new THREE.Vector3());
-  const desiredPos = useRef(new THREE.Vector3(14, 16, 14));
+  const currentLookAt = useRef(new THREE.Vector3(0, 0, 0));
   const initialized = useRef(false);
-  const shakeOffset = useRef(new THREE.Vector3());
+
+  // Isometric offset: 45° horizontal, ~35° elevation
+  const ISO_OFFSET = new THREE.Vector3(20, 22, 20);
 
   useFrame((_, delta) => {
-    if (!enabled || !targetRef?.current) return;
-
-    const baseDist = isMoving ? 14 : 12;
-    const height = isMoving ? 15 : 14;
-    const offset = new THREE.Vector3(baseDist, height, baseDist);
+    if (!targetRef?.current) return;
 
     const t = targetRef.current;
-    const goal = new THREE.Vector3(t.x, t.y ?? 0, t.z);
-    lookAt.current.copy(goal);
-    lookAt.current.y += 1.4;
+    const target = new THREE.Vector3(t.x ?? 0, 0, t.z ?? 0);
 
-    desiredPos.current.copy(goal).add(offset);
+    const desiredPos = target.clone().add(ISO_OFFSET);
 
+    // Shake on breach
     if (shake > 0) {
-      shakeOffset.current.set(
-        (Math.random() - 0.5) * shake * 0.15,
-        (Math.random() - 0.5) * shake * 0.1,
-        (Math.random() - 0.5) * shake * 0.15
-      );
-      desiredPos.current.add(shakeOffset.current);
+      desiredPos.x += (Math.random() - 0.5) * shake * 0.12;
+      desiredPos.y += (Math.random() - 0.5) * shake * 0.08;
     }
 
     if (!initialized.current) {
-      camera.position.copy(desiredPos.current);
+      camera.position.copy(desiredPos);
+      currentLookAt.current.copy(target);
+      camera.lookAt(target);
       initialized.current = true;
     }
 
-    const smooth = 1 - Math.exp(-3.5 * delta);
-    camera.position.lerp(desiredPos.current, smooth);
-    camera.lookAt(lookAt.current);
-
-    if (camera instanceof THREE.PerspectiveCamera) {
-      const targetFov = isMoving ? 44 : 40;
-      camera.fov = THREE.MathUtils.lerp(camera.fov, targetFov, smooth);
-      camera.updateProjectionMatrix();
-    }
+    // Smooth lerp factor — 0.05 is Cloud Quest's feel
+    const lerpFactor = Math.min(1, delta * 6);
+    camera.position.lerp(desiredPos, lerpFactor * 0.5);
+    currentLookAt.current.lerp(target, lerpFactor * 0.5);
+    camera.lookAt(currentLookAt.current);
   });
 
   return null;

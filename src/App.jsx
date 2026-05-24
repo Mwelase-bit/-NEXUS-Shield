@@ -13,6 +13,7 @@ import AfterActionReport from './components/AfterActionReport';
 import OrgDashboard from './components/org/OrgDashboard';
 import AILoading from './components/AILoading';
 import Minimap from './components/Minimap';
+import NPCMissionFlow from './components/NPCMissionFlow';
 import { generateMission, generateDebrief } from './services/claude';
 import { SEED_MISSIONS, buildSeedMission } from './data/seedData';
 import { getRankFromXp } from './utils/scoring';
@@ -21,6 +22,8 @@ function AppShell() {
   const { state, dispatch, recordResponse, finishMission } = useGame();
   const [missions, setMissions] = useState([...SEED_MISSIONS]);
   const [missionLoading, setMissionLoading] = useState(false);
+  const [activeNPC, setActiveNPC] = useState(null);          // NPC Cloud Quest flow
+  const [completedMissions, setCompletedMissions] = useState([]);  // Track secured districts
 
   const handleCityReady = useCallback(() => {
     dispatch({ type: 'CITY_READY' });
@@ -41,12 +44,9 @@ function AppShell() {
     return () => clearTimeout(t);
   }, [state.cityReady, dispatch]);
 
-  const handleDistrictClick = useCallback(
-    (district) => {
-      dispatch({ type: 'SET_DISTRICT', district });
-    },
-    [dispatch]
-  );
+  const handleDistrictClick = useCallback((district) => {
+    dispatch({ type: 'SET_DISTRICT', district });
+  }, [dispatch]);
 
   const refreshMissions = useCallback(async () => {
     setMissionLoading(true);
@@ -71,7 +71,7 @@ function AppShell() {
     if (state.screen === 'city' && state.role === 'analyst') {
       refreshMissions();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- run once when entering city
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.screen, state.role]);
 
   useEffect(() => {
@@ -80,11 +80,24 @@ function AppShell() {
     return () => clearInterval(id);
   }, [state.missionMode, state.missionTimeLeft, dispatch]);
 
-  const acceptMission = (mission) => {
+  /** NPC interaction — opens Cloud Quest-style mission flow */
+  const handleNPCInteract = useCallback((npc) => {
+    setActiveNPC(npc);
+  }, []);
+
+  /** Player clicked Launch in NPC flow → open SOC dashboard */
+  const handleNPCAcceptSOC = useCallback((socMission) => {
+    const full = socMission.logs ? socMission : { ...buildSeedMission(socMission.district || state.selectedDistrict), ...socMission };
+    dispatch({ type: 'SET_MISSION', mission: full });
+    dispatch({ type: 'SET_DISTRICT', district: full.district || state.selectedDistrict });
+    setActiveNPC(null);
+  }, [dispatch, state.selectedDistrict]);
+
+  const acceptMission = useCallback((mission) => {
     const full = mission.logs ? mission : { ...buildSeedMission(mission.district || state.selectedDistrict), ...mission };
     dispatch({ type: 'SET_MISSION', mission: full });
     dispatch({ type: 'SET_DISTRICT', district: full.district || state.selectedDistrict });
-  };
+  }, [dispatch, state.selectedDistrict]);
 
   const handleResponse = async (alert, action, result) => {
     const count = await recordResponse(alert, action, result);
@@ -109,29 +122,38 @@ function AppShell() {
     }
   };
 
+  /** After debrief, mark district as secured */
+  const handleContinue = useCallback(() => {
+    if (state.activeMission?.district && !completedMissions.includes(state.activeMission.district)) {
+      setCompletedMissions((prev) => [...prev, state.activeMission.district]);
+    }
+    dispatch({ type: 'RETURN_CITY' });
+  }, [dispatch, state.activeMission, completedMissions]);
+
   const handleIntel = () => {
     dispatch({ type: 'HINT_USED' });
     dispatch({ type: 'APPLY_XP', delta: -100 });
   };
 
-  const showOverlay = ['boot', 'role', 'onboard', 'login'].includes(state.screen);
   const showCityUI = state.role === 'analyst' && ['city', 'debrief'].includes(state.screen);
   const showOrg = state.role === 'organisation' && state.screen === 'org';
 
   return (
     <div className="nexus-app">
-      {/* City always mounted — renders before UI overlays clear */}
+      {/* City always mounted */}
       <CyberCity
         visible={state.cityReady}
         onDistrictClick={handleDistrictClick}
         onReady={handleCityReady}
-        controlsEnabled={state.role === 'analyst' && state.screen === 'city' && !state.missionMode}
+        onNPCInteract={handleNPCInteract}
+        controlsEnabled={state.role === 'analyst' && state.screen === 'city' && !state.missionMode && !activeNPC}
+        completedMissions={completedMissions}
       />
 
       {!state.cityReady && (
         <div className="city-loading-screen">
           <div className="city-loading-spinner" />
-          <p>INITIALISING CYBER CITY...</p>
+          <p>INITIALISING NEXUS SHIELD...</p>
         </div>
       )}
 
@@ -186,12 +208,21 @@ function AppShell() {
               </button>
             ))}
           </div>
-          {!state.missionMode && (
+          {!state.missionMode && !activeNPC && (
             <button type="button" className="nexus-btn primary fab-mission" onClick={() => missions[0] && acceptMission(missions[0])}>
               QUICK DEPLOY
             </button>
           )}
         </>
+      )}
+
+      {/* Cloud Quest NPC Mission Flow */}
+      {activeNPC && (
+        <NPCMissionFlow
+          npc={activeNPC}
+          onAcceptSOC={handleNPCAcceptSOC}
+          onClose={() => setActiveNPC(null)}
+        />
       )}
 
       {state.missionMode && (
@@ -216,7 +247,7 @@ function AppShell() {
           newRank={state.newRank}
           callsign={state.callsign}
           xp={state.xp}
-          onContinue={() => dispatch({ type: 'RETURN_CITY' })}
+          onContinue={handleContinue}
           onClearRankUp={() => dispatch({ type: 'CLEAR_RANK_UP' })}
         />
       )}
