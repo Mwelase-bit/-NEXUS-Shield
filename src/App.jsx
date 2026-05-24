@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { Target, User, Terminal, LogOut } from 'lucide-react';
 import { GameProvider, useGame } from './context/GameContext';
 import CyberCity from './components/city/CyberCity';
 import BootSequence from './components/BootSequence';
@@ -14,6 +15,7 @@ import OrgDashboard from './components/org/OrgDashboard';
 import AILoading from './components/AILoading';
 import Minimap from './components/Minimap';
 import NPCMissionFlow from './components/NPCMissionFlow';
+import LoginMFA from './components/LoginMFA';
 import { generateMission, generateDebrief } from './services/claude';
 import { SEED_MISSIONS, buildSeedMission } from './data/seedData';
 import { getRankFromXp } from './utils/scoring';
@@ -158,12 +160,12 @@ function AppShell() {
       )}
 
       {state.screen === 'boot' && state.cityReady && (
-        <BootSequence onComplete={() => dispatch({ type: 'SET_SCREEN', screen: 'role' })} />
+        <BootSequence onComplete={() => dispatch({ type: 'SET_SCREEN', screen: 'login' })} />
       )}
 
-      {state.screen === 'role' && (
-        <RoleSelection
-          onSelect={(role) => {
+      {state.screen === 'login' && (
+        <LoginMFA
+          onComplete={(role) => {
             dispatch({ type: 'SET_ROLE', role });
             dispatch({ type: 'SET_SCREEN', screen: role === 'analyst' ? 'onboard' : 'org' });
           }}
@@ -201,12 +203,47 @@ function AppShell() {
             />
           )}
           <Minimap selected={state.selectedDistrict} avatarPosition={state.avatarPosition} />
-          <div className="panel-toggles">
-            {['left', 'right', 'bottom'].map((p) => (
-              <button key={p} type="button" className="toggle-btn" onClick={() => dispatch({ type: 'TOGGLE_PANEL', panel: p })}>
-                {p[0].toUpperCase()}
-              </button>
-            ))}
+          <div className="holo-control-dock glass-panel">
+            <button
+              type="button"
+              className={`dock-btn ${state.panels.left ? 'active' : ''}`}
+              title="Mission Board"
+              onClick={() => dispatch({ type: 'TOGGLE_PANEL', panel: 'left' })}
+            >
+              <Target size={16} />
+              <span>MISSIONS</span>
+            </button>
+            <button
+              type="button"
+              className={`dock-btn ${state.panels.right ? 'active' : ''}`}
+              title="Analyst Profile"
+              onClick={() => dispatch({ type: 'TOGGLE_PANEL', panel: 'right' })}
+            >
+              <User size={16} />
+              <span>PROFILE</span>
+            </button>
+            <button
+              type="button"
+              className={`dock-btn ${state.panels.bottom ? 'active' : ''}`}
+              title="Threat Feed"
+              onClick={() => dispatch({ type: 'TOGGLE_PANEL', panel: 'bottom' })}
+            >
+              <Terminal size={16} />
+              <span>THREAT FEED</span>
+            </button>
+            <div className="dock-divider" />
+            <button
+              type="button"
+              className="dock-btn logout"
+              title="Exit Console"
+              onClick={() => {
+                dispatch({ type: 'SET_SCREEN', screen: 'login' });
+                dispatch({ type: 'SET_ROLE', role: null });
+              }}
+            >
+              <LogOut size={16} />
+              <span>LOG OUT</span>
+            </button>
           </div>
           {!state.missionMode && !activeNPC && (
             <button type="button" className="nexus-btn primary fab-mission" onClick={() => missions[0] && acceptMission(missions[0])}>

@@ -13,6 +13,7 @@ import CityNPCs from './CityNPCs';
 import { CityAtmosphere, CitySparkles, HorizonGlow, DataStreamParticles, StreetLamps, CyberTrees } from './CityAtmosphere';
 import CityPostProcessing from './PostProcessing';
 import SceneErrorBoundary from './SceneErrorBoundary';
+import ThreatPathVisualizer from './ThreatPathVisualizer';
 
 function DestinationMarker({ target }) {
   const ref = useRef();
@@ -146,6 +147,8 @@ function FullCityScene({ onDistrictClick, onReady, onNPCInteract, controlsEnable
         missionDistrict={state.activeMission?.district || null}
         completedMissions={completedMissions}
       />
+
+      {state.role === 'analyst' && <ThreatPathVisualizer />}
 
       <CityNPCs
         playerPos={state.avatarPosition}

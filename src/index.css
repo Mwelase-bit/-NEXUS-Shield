@@ -1,18 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;700&display=swap');
+
 /* NEXUS Shield — Design System */
 :root {
-  --nexus-black: #050a14;
-  --nexus-navy: #0d1b2a;
-  --nexus-mid: #1b3a5c;
-  --nexus-cyan: #00b4d8;
+  --nexus-black: #030712;
+  --nexus-navy: rgba(15, 23, 42, 0.65);
+  --nexus-mid: rgba(30, 41, 59, 0.5);
+  --nexus-cyan: #00f0ff;
   --nexus-bright-cyan: #00ffe5;
   --nexus-green: #00ff94;
   --nexus-amber: #ffb800;
-  --nexus-red: #ff2d55;
-  --nexus-purple: #7b2fff;
-  --nexus-white: #e8f4ff;
-  --font-display: 'Orbitron', sans-serif;
-  --font-body: 'Share Tech Mono', monospace;
-  --transition: 300ms ease;
+  --nexus-red: #ff2a54;
+  --nexus-purple: #8a2be2;
+  --nexus-white: #f3f4f6;
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
+  --transition: 300ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 * {
@@ -1875,3 +1877,1552 @@ body,
 .mfp-reward-icon {
   font-size: 14px;
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   NEXUS UPGRADED CYBERNETIC STYLE ENGINE (AWS CLOUD QUEST)
+   ═══════════════════════════════════════════════════════════════ */
+
+/* 1. Secure Login & MFA Gateway */
+.login-mfa-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: radial-gradient(circle at center, #0B1929 0%, #030712 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.login-mfa-container {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 1.5rem;
+  max-width: 960px;
+  width: 100%;
+  animation: scaleIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.login-mfa-card {
+  background: rgba(13, 27, 42, 0.85);
+  border: 1px solid rgba(0, 180, 216, 0.35);
+  border-radius: 12px;
+  padding: 2rem;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 180, 216, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.login-mfa-card.security-controls {
+  background: rgba(13, 27, 42, 0.5);
+  border-color: rgba(123, 47, 255, 0.25);
+  justify-content: space-between;
+}
+
+.card-header-glowing {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.card-header-glowing h2 {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  color: var(--nexus-bright-cyan);
+  text-shadow: 0 0 10px rgba(0, 255, 229, 0.4);
+}
+
+.login-mfa-card h3 {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: var(--nexus-purple);
+  margin-bottom: 1.25rem;
+  text-shadow: 0 0 10px rgba(123, 47, 255, 0.3);
+}
+
+.login-mfa-card .subtitle {
+  font-size: 0.8rem;
+  color: rgba(180, 200, 220, 0.6);
+  margin-bottom: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--nexus-cyan);
+  letter-spacing: 0.05em;
+}
+
+.form-group input,
+.form-group select {
+  background: rgba(5, 10, 20, 0.75);
+  border: 1px solid rgba(0, 180, 216, 0.25);
+  border-radius: 6px;
+  padding: 0.75rem;
+  color: #fff;
+  font-family: inherit;
+  font-size: 0.85rem;
+  transition: all 0.3s;
+}
+
+.form-group input:focus {
+  border-color: var(--nexus-bright-cyan);
+  box-shadow: 0 0 10px rgba(0, 255, 229, 0.25);
+  outline: none;
+}
+
+.form-group input[type="text"] {
+  text-align: center;
+  letter-spacing: 0.25em;
+  font-size: 1.1rem;
+}
+
+.mfa-instructions {
+  font-size: 0.8rem;
+  color: rgba(180, 200, 220, 0.7);
+  line-height: 1.5;
+  margin-bottom: 0.5rem;
+}
+
+.security-alert {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  margin-bottom: 1.25rem;
+  font-family: monospace;
+}
+
+.security-alert.fail {
+  border: 1px solid var(--nexus-red);
+  background: rgba(255, 45, 85, 0.1);
+  color: #FF859C;
+}
+
+.quick-access {
+  margin-top: 1.5rem;
+  border-top: 1px solid rgba(27, 58, 92, 0.5);
+  padding-top: 1.25rem;
+  font-size: 0.7rem;
+  color: rgba(180, 200, 220, 0.5);
+}
+
+.quick-buttons {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.quick-buttons button {
+  flex: 1;
+  background: rgba(27, 58, 92, 0.3);
+  border: 1px solid rgba(0, 180, 216, 0.25);
+  color: var(--nexus-bright-cyan);
+  padding: 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.quick-buttons button:hover {
+  background: rgba(0, 180, 216, 0.15);
+  border-color: var(--nexus-bright-cyan);
+}
+
+/* Secure Pipeline loading logs */
+.session-generation {
+  text-align: center;
+  padding: 1.5rem 0;
+}
+
+.session-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(0, 255, 229, 0.1);
+  border-top-color: var(--nexus-bright-cyan);
+  border-radius: 50%;
+  margin: 0 auto 1.25rem;
+  animation: spin 0.8s linear infinite;
+}
+
+.session-generation h3 {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--nexus-bright-cyan);
+  margin-bottom: 1rem;
+  text-shadow: 0 0 10px rgba(0, 255, 229, 0.3);
+}
+
+.session-console {
+  background: #030712;
+  border: 1px solid rgba(27, 58, 92, 0.8);
+  border-radius: 6px;
+  padding: 1rem;
+  text-align: left;
+  font-family: monospace;
+  font-size: 0.7rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  max-height: 140px;
+  overflow-y: auto;
+}
+
+.session-console .line {
+  margin: 0;
+}
+.session-console .line.green { color: #00FF94; }
+.session-console .line.cyan { color: #00FFE5; }
+.session-console .line.blink { animation: animate-flicker 1s infinite; }
+
+/* Right Panel Deployed Defenses explanation */
+.control-item {
+  margin-bottom: 1.25rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid rgba(27, 58, 92, 0.3);
+}
+.control-item:last-of-type {
+  border-bottom: none;
+}
+
+.control-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #fff;
+  margin-bottom: 0.5rem;
+}
+
+.control-item p {
+  font-size: 0.75rem;
+  color: rgba(180, 200, 220, 0.7);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.security-seal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: #00FF94;
+  background: rgba(0, 255, 148, 0.08);
+  border: 1px solid rgba(0, 255, 148, 0.25);
+  padding: 0.6rem;
+  border-radius: 6px;
+}
+
+/* 2. 3D GNN Attack Path badges */
+.threat-path-badge {
+  position: relative;
+  background: rgba(5, 10, 20, 0.95);
+  border: 1.5px solid rgba(255, 45, 85, 0.7);
+  border-radius: 8px;
+  padding: 6px 10px;
+  min-width: 150px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  box-shadow: 0 4px 20px rgba(255, 45, 85, 0.25), 0 0 10px rgba(0, 0, 0, 0.8);
+  font-family: monospace;
+  pointer-events: none;
+}
+
+.threat-path-badge .badge-tag {
+  font-size: 7px;
+  font-weight: 800;
+  color: #FF859C;
+  letter-spacing: 0.1em;
+}
+
+.threat-path-badge .badge-route {
+  font-size: 8px;
+  color: #E2E8F0;
+  font-weight: 700;
+}
+
+.threat-path-badge .badge-prob {
+  font-size: 10px;
+  color: #FF2D55;
+  font-weight: 800;
+}
+
+.pulse-dot-red {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 6px;
+  height: 6px;
+  background: #FF2D55;
+  border-radius: 50%;
+  animation: pulse-marker 1s ease infinite;
+}
+
+/* 3. AWS Cloud Quest-Style HUD Upgrades */
+.hud-top.glass-panel {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  right: 1rem;
+  z-index: 25;
+  background: rgba(13, 27, 42, 0.85);
+  border: 1px solid rgba(0, 180, 216, 0.3);
+  border-radius: 12px;
+  padding: 0.75rem 1.25rem;
+  display: grid;
+  grid-template-columns: 0.8fr 1.5fr 1fr 1fr;
+  gap: 1.5rem;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  align-items: center;
+}
+
+.hud-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-right: 1px solid rgba(27, 58, 92, 0.5);
+  padding-right: 1.25rem;
+}
+.hud-section:last-of-type {
+  border-right: none;
+  padding-right: 0;
+}
+
+.profile-block {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.hud-avatar-ring {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 2px solid var(--aura, #00B4D8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 10px var(--aura, #00B4D8);
+}
+
+.hud-avatar-icon {
+  width: 18px;
+  height: 18px;
+  color: var(--aura, #00B4D8);
+}
+
+.hud-identity {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.hud-identity .callsign {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  color: #fff;
+}
+
+.rank-badge {
+  font-size: 7px;
+  font-weight: 800;
+  background: var(--nexus-purple);
+  padding: 1px 4px;
+  border-radius: 4px;
+  width: max-content;
+  color: #fff;
+  letter-spacing: 0.05em;
+  margin-top: 1px;
+}
+
+/* Quest Card HUD */
+.quest-card .quest-header {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--nexus-cyan);
+  margin-bottom: 0.25rem;
+}
+
+.quest-card .quest-body strong {
+  font-size: 0.85rem;
+  color: #fff;
+  display: block;
+}
+
+.quest-card .truncated-briefing {
+  font-size: 0.75rem;
+  color: rgba(180, 200, 220, 0.7);
+  margin: 1px 0 0;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Threat Radar HUD */
+.threat-header {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--nexus-cyan);
+  margin-bottom: 0.25rem;
+}
+
+.threat-body {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.threat-indicator-pill {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  backdrop-filter: blur(4px);
+}
+.threat-indicator-pill.threat-GREEN { background: rgba(0, 255, 148, 0.1); color: #00FF94; border: 1px solid rgba(0,255,148,0.25); }
+.threat-indicator-pill.threat-YELLOW { background: rgba(255, 184, 0, 0.1); color: #FFB800; border: 1px solid rgba(255,184,0,0.25); }
+.threat-indicator-pill.threat-RED { background: rgba(255, 45, 85, 0.1); color: #FF2D55; border: 1px solid rgba(255,45,85,0.25); }
+
+.gnn-radar-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.gnn-radar-wrap small {
+  font-size: 7px;
+  font-family: monospace;
+  color: rgba(180, 200, 220, 0.5);
+}
+
+.radar-scanner {
+  width: 32px;
+  height: 8px;
+  background: rgba(0, 180, 216, 0.1);
+  border: 1px solid rgba(0, 180, 216, 0.35);
+  position: relative;
+  overflow: hidden;
+  border-radius: 2px;
+}
+.radar-scanner::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--nexus-bright-cyan);
+  box-shadow: 0 0 8px var(--nexus-bright-cyan);
+  animation: scan-radar 1.5s linear infinite;
+}
+.radar-scanner.RED::after { background: #FF2D55; box-shadow: 0 0 8px #FF2D55; }
+.radar-scanner.YELLOW::after { background: #FFB800; box-shadow: 0 0 8px #FFB800; }
+
+@keyframes scan-radar {
+  0% { left: -10%; }
+  100% { left: 110%; }
+}
+
+/* Stats Block HUD */
+.stats-block {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+}
+
+.xp-metric {
+  display: flex;
+  flex-direction: column;
+}
+
+.xp-metric .xp {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: var(--nexus-amber);
+  text-shadow: 0 0 8px rgba(255, 184, 0, 0.3);
+}
+
+.skill-meter-row {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.skill-meter {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.skill-tag {
+  font-size: 6px;
+  font-family: monospace;
+  color: rgba(180, 200, 220, 0.6);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.meter-bar {
+  height: 3px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.meter-bar .fill {
+  height: 100%;
+  border-radius: 2px;
+  box-shadow: 0 0 6px rgba(0, 255, 229, 0.4);
+}
+.meter-bar .fill.green { background: #00FF94; }
+.meter-bar .fill.orange { background: #FFB800; }
+
+/* HUD Active Mission Timer overlay */
+.hud-mission-timer {
+  position: fixed;
+  top: 5.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 25;
+  background: rgba(13, 27, 42, 0.95);
+  border: 1px solid rgba(255, 45, 85, 0.5);
+  border-radius: 8px;
+  padding: 0.6rem 1.25rem;
+  box-shadow: 0 4px 20px rgba(255, 45, 85, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.hud-mission-timer .timer-label {
+  font-size: 7px;
+  font-family: monospace;
+  font-weight: 800;
+  color: #FF859C;
+  letter-spacing: 0.08em;
+  display: block;
+}
+
+.hud-mission-timer .timer-value {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  color: var(--nexus-red);
+  text-shadow: 0 0 8px rgba(255, 45, 85, 0.4);
+  white-space: nowrap;
+}
+
+.bars-overlay {
+  display: flex;
+  gap: 0.75rem;
+  border-left: 1px solid rgba(255, 45, 85, 0.3);
+  padding-left: 0.75rem;
+}
+
+.bar-line {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.bar-line span {
+  font-size: 6px;
+  font-family: monospace;
+  color: rgba(180, 200, 220, 0.6);
+}
+
+.mini-bar {
+  width: 60px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.mini-bar div {
+  height: 100%;
+}
+.mini-bar.health div { background: #FF2D55; }
+.mini-bar.shield div { background: #00B4D8; }
+
+/* 4. Split SOC Incident Panel (Triage + AI Intelligence Hub) */
+.soc-dashboard {
+  background: radial-gradient(circle at center, #0D1B2A 0%, #030712 100%) !important;
+}
+
+.soc-layout-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.soc-left-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.soc-grid-inside {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+
+.soc-right-intel {
+  display: flex;
+  flex-direction: column;
+}
+
+.intel-hub-panel {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  border-color: rgba(123, 47, 255, 0.35) !important;
+  box-shadow: 0 0 16px rgba(123, 47, 255, 0.1);
+}
+
+.intel-hub-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+.intel-hub-header h3 {
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  color: var(--nexus-purple);
+  text-shadow: 0 0 8px rgba(123, 47, 255, 0.3);
+  margin: 0;
+}
+
+.brain-glow {
+  color: var(--nexus-purple);
+  filter: drop-shadow(0 0 6px var(--nexus-purple));
+}
+
+.intel-tabs {
+  display: flex;
+  gap: 0.25rem;
+  border-bottom: 1px solid rgba(27, 58, 92, 0.6);
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.intel-tabs button {
+  flex: 1;
+  background: rgba(5, 10, 20, 0.5);
+  border: 1px solid rgba(27, 58, 92, 0.5);
+  color: rgba(180, 200, 220, 0.6);
+  padding: 0.4rem 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.7rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  transition: all 0.2s;
+}
+
+.intel-tabs button:hover {
+  background: rgba(27, 58, 92, 0.3);
+  color: #fff;
+  border-color: rgba(0, 180, 216, 0.5);
+}
+
+.intel-tabs button.active {
+  background: rgba(0, 180, 216, 0.15);
+  border-color: var(--nexus-bright-cyan);
+  color: var(--nexus-bright-cyan);
+  box-shadow: 0 0 8px rgba(0, 255, 229, 0.15);
+}
+
+.intel-tab-content {
+  flex: 1;
+  background: #030712;
+  border: 1px solid rgba(27, 58, 92, 0.6);
+  border-radius: 6px;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+}
+
+/* SENSE Kafka styling */
+.tab-sense-view {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.telemetry-log-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.65rem;
+  color: rgba(180, 200, 220, 0.5);
+  margin-bottom: 0.5rem;
+  font-family: monospace;
+}
+
+.pydantic-tag {
+  color: #00FF94;
+}
+
+.kafka-terminal-feed {
+  background: #000;
+  border-radius: 4px;
+  padding: 0.6rem;
+  font-family: monospace;
+  font-size: 0.65rem;
+  height: 280px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.kafka-line {
+  color: #8892B0;
+  margin: 0;
+  line-height: 1.4;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  padding-bottom: 2px;
+}
+
+/* NARRATE Layer MITRE matrix layout */
+.text-narrative h4 {
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  color: var(--nexus-bright-cyan);
+  margin-bottom: 0.5rem;
+}
+
+.narrative-p {
+  font-size: 0.8rem;
+  color: rgba(180, 200, 220, 0.85);
+  line-height: 1.55;
+  margin-bottom: 0.75rem;
+}
+.narrative-p.font-cyan { color: #00FFE5; }
+.narrative-p.font-orange { color: #FFB800; }
+
+.mitre-matrix-mini {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.35rem;
+  margin-top: 1rem;
+}
+
+.mitre-cell {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(27, 58, 92, 0.5);
+  padding: 0.35rem;
+  font-size: 0.6rem;
+  border-radius: 3px;
+  text-align: center;
+  color: rgba(180, 200, 220, 0.4);
+}
+.mitre-cell.active {
+  background: rgba(0, 255, 148, 0.08);
+  border-color: #00FF94;
+  color: #00FF94;
+  font-weight: 700;
+}
+.mitre-cell.predict {
+  background: rgba(255, 184, 0, 0.08);
+  border-color: #FFB800;
+  color: #FFB800;
+  font-weight: 700;
+  animation: animate-flicker 1.5s infinite;
+}
+
+/* PREDICT Layer Deck cards */
+.tab-predict-view {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.tab-info-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--nexus-cyan);
+}
+.live-pill {
+  color: #FF2D55;
+  animation: pulse-marker 1s infinite;
+}
+
+.predictions-deck {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.prediction-card {
+  background: rgba(13, 27, 42, 0.5);
+  border: 1px solid rgba(0, 180, 216, 0.25);
+  border-radius: 6px;
+  padding: 0.75rem;
+  transition: all 0.3s;
+}
+
+.prediction-card:hover {
+  border-color: rgba(0, 255, 229, 0.45);
+}
+
+.prediction-card.critical-containment {
+  border-color: var(--nexus-red);
+  background: rgba(255, 45, 85, 0.08);
+  box-shadow: 0 0 10px rgba(255, 45, 85, 0.15);
+}
+
+.prediction-card .card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.35rem;
+}
+
+.target-district {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.confidence-pill {
+  font-size: 0.65rem;
+  background: rgba(0, 255, 229, 0.1);
+  color: var(--nexus-bright-cyan);
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-weight: 700;
+}
+
+.prediction-card.critical-containment .confidence-pill {
+  background: rgba(255, 45, 85, 0.2);
+  color: #FF859C;
+}
+
+.tech-desc {
+  font-size: 0.75rem;
+  color: rgba(180, 200, 220, 0.8);
+  margin: 0 0 0.5rem 0;
+  font-family: monospace;
+}
+
+.countdown-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #FFB800;
+}
+
+.containment-triggered {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #FF2D55;
+  font-family: monospace;
+}
+
+/* SHIELD Layer Orchestrations */
+.containment-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--nexus-cyan);
+  margin-bottom: 0.5rem;
+}
+.latency-metric {
+  color: #00FF94;
+}
+
+.shield-actions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  height: 280px;
+  overflow-y: auto;
+}
+
+.shield-action-log {
+  background: rgba(13, 27, 42, 0.4);
+  border: 1px solid rgba(27, 58, 92, 0.6);
+  border-radius: 6px;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.shield-action-log .log-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.action-name {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.action-status-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+.action-status-badge.active { background: rgba(0, 255, 148, 0.1); color: #00FF94; }
+.action-status-badge.isolated { background: rgba(255, 45, 85, 0.15); color: #FF2D55; animation: animate-flicker 1.5s infinite; }
+.action-status-badge.reversed-overridden { background: rgba(255, 184, 0, 0.15); color: #FFB800; }
+
+.action-reason {
+  font-size: 0.75rem;
+  color: rgba(180, 200, 220, 0.75);
+  line-height: 1.45;
+  margin: 0;
+}
+
+.log-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.25rem;
+}
+.log-footer small {
+  font-size: 0.65rem;
+  color: rgba(180, 200, 220, 0.45);
+  font-family: monospace;
+}
+
+/* 5. Org Dashboard Campaign Legal Gates */
+.co-tag {
+  font-size: 0.75rem;
+  background: rgba(123, 47, 255, 0.15);
+  color: var(--nexus-purple);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 700;
+  margin-left: 0.5rem;
+  vertical-align: middle;
+}
+
+.popia-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+.popia-badge.green {
+  background: rgba(0, 255, 148, 0.08);
+  color: #00FF94;
+  border: 1px solid rgba(0, 255, 148, 0.25);
+}
+
+/* Legal authorization overlay screen */
+.legal-gate-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  background: rgba(5, 10, 20, 0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.legal-gate-modal {
+  max-width: 580px;
+  width: 100%;
+  background: rgba(13, 27, 42, 0.95);
+  border: 1px solid rgba(0, 255, 148, 0.4);
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 255, 148, 0.1);
+}
+
+.legal-gate-modal .modal-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.legal-gate-modal .modal-header h3 {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  color: #fff;
+  margin: 0;
+}
+
+.modal-instruction {
+  font-size: 0.8rem;
+  color: rgba(180, 200, 220, 0.7);
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+}
+
+.legal-checks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  background: #030712;
+  border: 1px solid rgba(27, 58, 92, 0.6);
+  border-radius: 6px;
+  padding: 1rem;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.checkbox-item {
+  display: flex;
+  gap: 0.75rem;
+  cursor: pointer;
+  align-items: flex-start;
+}
+
+.checkbox-item input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin-top: 2px;
+  cursor: pointer;
+}
+
+.check-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.check-text strong {
+  font-size: 0.8rem;
+  color: #fff;
+}
+
+.check-text small {
+  font-size: 0.7rem;
+  color: rgba(180, 200, 220, 0.5);
+  font-family: monospace;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+.modal-actions button {
+  flex: 1;
+}
+
+/* Phase drill Board Org dashboard */
+.active-drill-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.drill-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+  color: rgba(180, 200, 220, 0.8);
+}
+.drill-status {
+  color: #00FF94;
+  font-weight: 700;
+}
+
+.drill-phases {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  margin: 0.5rem 0;
+}
+.drill-phases::before {
+  content: '';
+  position: absolute;
+  top: 11px;
+  left: 5%;
+  right: 5%;
+  height: 2px;
+  background: rgba(27, 58, 92, 0.8);
+  z-index: 1;
+}
+
+.phase-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  position: relative;
+  z-index: 2;
+}
+
+.phase-step .step-num {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--nexus-black);
+  border: 2px solid rgba(27, 58, 92, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  color: rgba(180, 200, 220, 0.4);
+  transition: all 0.3s;
+}
+
+.phase-step .step-name {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: rgba(180, 200, 220, 0.4);
+}
+
+.phase-step.active .step-num {
+  border-color: #00FF94;
+  color: #00FF94;
+  box-shadow: 0 0 10px rgba(0, 255, 148, 0.2);
+}
+.phase-step.active .step-name {
+  color: #00FF94;
+}
+
+.phase-step.current .step-num {
+  border-color: #00FFE5;
+  color: #00FFE5;
+  box-shadow: 0 0 10px rgba(0, 255, 229, 0.4);
+  animation: pulse-marker 1s ease infinite;
+}
+.phase-step.current .step-name {
+  color: #00FFE5;
+}
+
+.drill-console {
+  background: #030712;
+  border: 1px solid rgba(27, 58, 92, 0.7);
+  border-radius: 6px;
+  padding: 0.75rem;
+  font-family: monospace;
+  font-size: 0.65rem;
+  height: 120px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.console-line {
+  color: #A0AEC0;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.empty-drill {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 0;
+  gap: 0.5rem;
+}
+
+/* AI retraining metrics layout */
+.retraining-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background: #030712;
+  border: 1px solid rgba(27, 58, 92, 0.6);
+  border-radius: 6px;
+  padding: 0.75rem;
+}
+
+.model-stat-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: rgba(180, 200, 220, 0.7);
+}
+.green-text { color: #00FF94; }
+.cyan-text { color: #00FFE5; }
+.purple-text { color: var(--nexus-purple); }
+
+.risk-analysis-text h4 {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  color: var(--nexus-purple);
+  margin-top: 0.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.bullet-insights {
+  list-style: square;
+  font-size: 0.75rem;
+  color: rgba(180, 200, 220, 0.8);
+  padding-left: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.risk-level-tag {
+  font-weight: 700;
+  font-size: 0.75rem;
+  color: #FFB800;
+  margin-bottom: 0.5rem;
+}
+
+.table-header-filter {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+.table-header-filter small {
+  color: rgba(180, 200, 220, 0.5);
+  font-size: 0.7rem;
+}
+.table-header-filter button {
+  background: none;
+  border: 1px solid var(--nexus-purple);
+  color: var(--nexus-purple);
+  font-size: 0.65rem;
+  padding: 1px 5px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.pass-tag {
+  color: #00FF94;
+  font-weight: 700;
+}
+.fail-tag {
+  color: #FF2D55;
+  font-weight: 700;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   HOLOGRAPHIC QUICK-ACCESS CONTROL DOCK (AWS CLOUD QUEST STYLE)
+   ═══════════════════════════════════════════════════════════════ */
+.holo-control-dock {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 25;
+  background: rgba(10, 18, 30, 0.85) !important;
+  border: 1px solid rgba(0, 240, 255, 0.25) !important;
+  border-radius: 40px !important;
+  padding: 0.5rem 1.5rem !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 1.25rem !important;
+  backdrop-filter: blur(20px) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 15px rgba(0, 240, 255, 0.15) !important;
+  animation: dockSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+@keyframes dockSlideUp {
+  from { transform: translateX(-50%) translateY(40px); opacity: 0; }
+  to { transform: translateX(-50%) translateY(0); opacity: 1; }
+}
+
+.dock-btn {
+  background: none !important;
+  border: none !important;
+  color: rgba(243, 244, 246, 0.5) !important;
+  cursor: pointer !important;
+  padding: 0.4rem 0.8rem !important;
+  border-radius: 20px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  font-family: var(--font-display) !important;
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.05em !important;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.dock-btn svg {
+  transition: transform 0.3s ease !important;
+}
+
+.dock-btn:hover {
+  color: var(--nexus-bright-cyan) !important;
+  background: rgba(0, 240, 255, 0.08) !important;
+}
+
+.dock-btn:hover svg {
+  transform: translateY(-2px) scale(1.1) !important;
+}
+
+.dock-btn.active {
+  color: var(--nexus-bright-cyan) !important;
+  background: rgba(0, 240, 255, 0.12) !important;
+  box-shadow: inset 0 0 8px rgba(0, 240, 255, 0.2) !important;
+  border: 1px solid rgba(0, 240, 255, 0.15) !important;
+}
+
+.dock-divider {
+  width: 1px !important;
+  height: 20px !important;
+  background: rgba(255, 255, 255, 0.12) !important;
+}
+
+.dock-btn.logout {
+  color: rgba(255, 42, 84, 0.6) !important;
+}
+
+.dock-btn.logout:hover {
+  color: #ff2a54 !important;
+  background: rgba(255, 42, 84, 0.08) !important;
+}
+
+/* Override cleanups of unnecessary toggles */
+.panel-toggles {
+  display: none !important;
+}
+
+.fab-mission {
+  bottom: 5.5rem !important;
+  right: 1.5rem !important;
+  border-radius: 30px !important;
+  font-family: var(--font-display) !important;
+  font-size: 0.75rem !important;
+  padding: 0.6rem 1.25rem !important;
+  box-shadow: 0 4px 20px rgba(0, 240, 255, 0.25) !important;
+}
+
+/* Glassmorphism overhauls to remove unnecessary blocky textures */
+.panel {
+  background: rgba(10, 18, 30, 0.75) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  backdrop-filter: blur(15px) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5) !important;
+}
+
+.left-panel {
+  border-radius: 0 12px 12px 0 !important;
+  border-left: none !important;
+}
+
+.right-panel {
+  border-radius: 12px 0 0 12px !important;
+  border-right: none !important;
+}
+
+.bottom-panel {
+  border-radius: 12px 12px 0 0 !important;
+  border-bottom: none !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ORGANISATION DASHBOARD BRUSHED GOLD & AMBER OVERHAUL
+   ═══════════════════════════════════════════════════════════════ */
+.org-dashboard {
+  background: radial-gradient(circle at 50% 50%, #1a1205 0%, #030201 100%) !important;
+}
+
+.org-header {
+  border-bottom: 1px solid rgba(245, 158, 11, 0.25) !important;
+}
+
+.org-header h1 {
+  color: #f59e0b !important;
+  text-shadow: 0 0 10px rgba(245, 158, 11, 0.35) !important;
+}
+
+.org-header-actions .popia-badge.green {
+  background: rgba(16, 185, 129, 0.08) !important;
+  color: #10b981 !important;
+  border: 1px solid rgba(16, 185, 129, 0.25) !important;
+}
+
+.org-card {
+  background: rgba(30, 20, 5, 0.45) !important;
+  border: 1px solid rgba(245, 158, 11, 0.18) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 20px rgba(245, 158, 11, 0.06) !important;
+  backdrop-filter: blur(10px) !important;
+}
+
+.org-card h3 {
+  color: #eab308 !important;
+  text-shadow: 0 0 8px rgba(234, 179, 8, 0.2) !important;
+}
+
+.gauge-value {
+  color: var(--risk-color) !important;
+}
+
+.pass-tag {
+  color: #10b981 !important;
+}
+
+.fail-tag {
+  color: #ff2a54 !important;
+}
+
+.emp-table th {
+  color: #f59e0b !important;
+  border-bottom: 1px solid rgba(245, 158, 11, 0.25) !important;
+}
+
+.emp-table td {
+  border-bottom: 1px solid rgba(245, 158, 11, 0.1) !important;
+}
+
+.emp-table tr.high-risk {
+  background: rgba(255, 42, 84, 0.1) !important;
+}
+
+.risk-pill {
+  background: rgba(245, 158, 11, 0.12) !important;
+  border: 1px solid rgba(245, 158, 11, 0.2) !important;
+  color: #fff !important;
+}
+
+.risk-pill.critical {
+  background: #ff2a54 !important;
+  border-color: #ff2a54 !important;
+}
+
+.org-card select {
+  background: rgba(20, 15, 5, 0.85) !important;
+  border: 1px solid rgba(245, 158, 11, 0.25) !important;
+  color: #fff !important;
+}
+
+.org-card select:focus {
+  border-color: #f59e0b !important;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.2) !important;
+}
+
+/* Phase board timeline updates */
+.phase-step.active .step-num {
+  border-color: #10b981 !important;
+  color: #10b981 !important;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.25) !important;
+}
+.phase-step.active .step-name {
+  color: #10b981 !important;
+}
+
+.phase-step.current .step-num {
+  border-color: #f59e0b !important;
+  color: #f59e0b !important;
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.4) !important;
+}
+.phase-step.current .step-name {
+  color: #f59e0b !important;
+}
+
+.drill-console {
+  border: 1px solid rgba(245, 158, 11, 0.2) !important;
+}
+
+/* Retraining metric loop text updates */
+.retraining-grid {
+  border: 1px solid rgba(245, 158, 11, 0.2) !important;
+}
+
+.green-text {
+  color: #10b981 !important;
+}
+
+.cyan-text {
+  color: #eab308 !important;
+}
+
+.risk-analysis-text h4 {
+  color: #f59e0b !important;
+}
+
+.risk-level-tag {
+  color: #f59e0b !important;
+}
+
+.legal-gate-modal {
+  background: rgba(30, 20, 5, 0.95) !important;
+  border: 1px solid rgba(245, 158, 11, 0.35) !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(245, 158, 11, 0.1) !important;
+}
+
+.legal-checks-list {
+  border: 1px solid rgba(245, 158, 11, 0.2) !important;
+}
+
+.check-text strong {
+  color: #e5e7eb !important;
+}
+
+.check-text small {
+  color: rgba(245, 158, 11, 0.6) !important;
+}
+
+/* Button overrides for Org command to use Amber Gradient */
+.org-dashboard .nexus-btn.primary {
+  background: linear-gradient(135deg, #f59e0b, #ffb800) !important;
+  box-shadow: 0 4px 16px rgba(245, 158, 11, 0.35) !important;
+  border: none !important;
+  color: #111 !important;
+  font-weight: 700 !important;
+}
+
+.org-dashboard .nexus-btn.primary:hover {
+  background: linear-gradient(135deg, #ffb800, #fbbf24) !important;
+  box-shadow: 0 4px 24px rgba(245, 158, 11, 0.45) !important;
+  transform: translateY(-1px) !important;
+}
+
+.org-dashboard .nexus-btn.ghost {
+  border: 1px solid rgba(245, 158, 11, 0.3) !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+  background: rgba(245, 158, 11, 0.05) !important;
+}
+
+.org-dashboard .nexus-btn.ghost:hover {
+  background: rgba(245, 158, 11, 0.12) !important;
+  border-color: #f59e0b !important;
+  color: #fff !important;
+}
+
+
+
