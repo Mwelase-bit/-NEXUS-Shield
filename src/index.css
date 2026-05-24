@@ -3255,41 +3255,46 @@ body,
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   ORGANISATION DASHBOARD BRUSHED GOLD & AMBER OVERHAUL
+   ORGANISATION DASHBOARD DEEP OBSIDIAN TITANIUM OVERHAUL (MUTED & PROFESSIONAL)
    ═══════════════════════════════════════════════════════════════ */
 .org-dashboard {
-  background: radial-gradient(circle at 50% 50%, #1a1205 0%, #030201 100%) !important;
+  background: #020617 !important; /* Deepest, clean slate-obsidian */
 }
 
 .org-header {
-  border-bottom: 1px solid rgba(245, 158, 11, 0.25) !important;
+  border-bottom: 1px solid #1e293b !important; /* Thin slate border */
+  padding-bottom: 1.25rem !important;
 }
 
 .org-header h1 {
-  color: #f59e0b !important;
-  text-shadow: 0 0 10px rgba(245, 158, 11, 0.35) !important;
+  color: #f8fafc !important; /* Pristine titanium white */
+  text-shadow: none !important; /* No garish glows */
 }
 
 .org-header-actions .popia-badge.green {
-  background: rgba(16, 185, 129, 0.08) !important;
+  background: rgba(16, 185, 129, 0.06) !important;
   color: #10b981 !important;
-  border: 1px solid rgba(16, 185, 129, 0.25) !important;
+  border: 1px solid rgba(16, 185, 129, 0.2) !important;
 }
 
 .org-card {
-  background: rgba(30, 20, 5, 0.45) !important;
-  border: 1px solid rgba(245, 158, 11, 0.18) !important;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 20px rgba(245, 158, 11, 0.06) !important;
-  backdrop-filter: blur(10px) !important;
+  background: rgba(15, 23, 42, 0.75) !important; /* Muted slate glass */
+  border: 1px solid rgba(255, 255, 255, 0.04) !important; /* Extremely thin dark boundary */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45) !important; /* Muted shadow */
+  backdrop-filter: blur(12px) !important;
 }
 
 .org-card h3 {
-  color: #eab308 !important;
-  text-shadow: 0 0 8px rgba(234, 179, 8, 0.2) !important;
+  color: #94a3b8 !important; /* Muted steel text */
+  text-shadow: none !important;
+  font-size: 0.8rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
 }
 
 .gauge-value {
   color: var(--risk-color) !important;
+  font-weight: 700 !important;
 }
 
 .pass-tag {
@@ -3297,70 +3302,78 @@ body,
 }
 
 .fail-tag {
-  color: #ff2a54 !important;
+  color: #ef4444 !important;
 }
 
 .emp-table th {
-  color: #f59e0b !important;
-  border-bottom: 1px solid rgba(245, 158, 11, 0.25) !important;
+  color: #e2e8f0 !important; /* Clean platinum headers */
+  border-bottom: 1px solid #1e293b !important;
+  font-weight: 600 !important;
 }
 
 .emp-table td {
-  border-bottom: 1px solid rgba(245, 158, 11, 0.1) !important;
+  border-bottom: 1px solid #0f172a !important;
+  color: #cbd5e1 !important;
 }
 
 .emp-table tr.high-risk {
-  background: rgba(255, 42, 84, 0.1) !important;
+  background: rgba(239, 68, 68, 0.06) !important; /* Very subtle danger background */
 }
 
 .risk-pill {
-  background: rgba(245, 158, 11, 0.12) !important;
-  border: 1px solid rgba(245, 158, 11, 0.2) !important;
-  color: #fff !important;
+  background: #1e293b !important;
+  border: 1px solid #334155 !important;
+  color: #e2e8f0 !important;
 }
 
 .risk-pill.critical {
-  background: #ff2a54 !important;
-  border-color: #ff2a54 !important;
-}
-
-.org-card select {
-  background: rgba(20, 15, 5, 0.85) !important;
-  border: 1px solid rgba(245, 158, 11, 0.25) !important;
+  background: #ef4444 !important;
+  border-color: #ef4444 !important;
   color: #fff !important;
 }
 
+.org-card select {
+  background: #0f172a !important;
+  border: 1px solid #1e293b !important;
+  color: #e2e8f0 !important;
+  border-radius: 4px !important;
+  padding: 0.5rem !important;
+}
+
 .org-card select:focus {
-  border-color: #f59e0b !important;
-  box-shadow: 0 0 10px rgba(245, 158, 11, 0.2) !important;
+  border-color: #38bdf8 !important; /* Clean sky-blue focus */
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.15) !important;
+  outline: none;
 }
 
 /* Phase board timeline updates */
 .phase-step.active .step-num {
   border-color: #10b981 !important;
   color: #10b981 !important;
-  box-shadow: 0 0 10px rgba(16, 185, 129, 0.25) !important;
+  box-shadow: none !important;
 }
 .phase-step.active .step-name {
   color: #10b981 !important;
 }
 
 .phase-step.current .step-num {
-  border-color: #f59e0b !important;
-  color: #f59e0b !important;
-  box-shadow: 0 0 12px rgba(245, 158, 11, 0.4) !important;
+  border-color: #38bdf8 !important; /* Executive Sky-Blue current indicator */
+  color: #38bdf8 !important;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.25) !important;
 }
 .phase-step.current .step-name {
-  color: #f59e0b !important;
+  color: #38bdf8 !important;
 }
 
 .drill-console {
-  border: 1px solid rgba(245, 158, 11, 0.2) !important;
+  border: 1px solid #1e293b !important;
+  background: #090d16 !important;
 }
 
 /* Retraining metric loop text updates */
 .retraining-grid {
-  border: 1px solid rgba(245, 158, 11, 0.2) !important;
+  border: 1px solid #1e293b !important;
+  background: #090d16 !important;
 }
 
 .green-text {
@@ -3368,59 +3381,65 @@ body,
 }
 
 .cyan-text {
-  color: #eab308 !important;
+  color: #38bdf8 !important; /* Steel sky-blue */
 }
 
 .risk-analysis-text h4 {
-  color: #f59e0b !important;
+  color: #cbd5e1 !important;
+  font-size: 0.8rem !important;
 }
 
 .risk-level-tag {
   color: #f59e0b !important;
-}
-
-.legal-gate-modal {
-  background: rgba(30, 20, 5, 0.95) !important;
-  border: 1px solid rgba(245, 158, 11, 0.35) !important;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(245, 158, 11, 0.1) !important;
-}
-
-.legal-checks-list {
-  border: 1px solid rgba(245, 158, 11, 0.2) !important;
-}
-
-.check-text strong {
-  color: #e5e7eb !important;
-}
-
-.check-text small {
-  color: rgba(245, 158, 11, 0.6) !important;
-}
-
-/* Button overrides for Org command to use Amber Gradient */
-.org-dashboard .nexus-btn.primary {
-  background: linear-gradient(135deg, #f59e0b, #ffb800) !important;
-  box-shadow: 0 4px 16px rgba(245, 158, 11, 0.35) !important;
-  border: none !important;
-  color: #111 !important;
   font-weight: 700 !important;
 }
 
+.legal-gate-modal {
+  background: #0f172a !important; /* Clean steel dark card */
+  border: 1px solid #334155 !important;
+  box-shadow: 0 10px 45px rgba(0, 0, 0, 0.8) !important;
+}
+
+.legal-checks-list {
+  border: 1px solid #1e293b !important;
+  background: #090d16 !important;
+}
+
+.check-text strong {
+  color: #e2e8f0 !important;
+}
+
+.check-text small {
+  color: #64748b !important;
+}
+
+/* Button overrides for Org command to use Muted Executive Steel-Blue styling */
+.org-dashboard .nexus-btn.primary {
+  background: #1e293b !important;
+  border: 1px solid #475569 !important;
+  color: #f8fafc !important;
+  font-weight: 600 !important;
+  box-shadow: none !important;
+  transition: all 0.2s ease !important;
+}
+
 .org-dashboard .nexus-btn.primary:hover {
-  background: linear-gradient(135deg, #ffb800, #fbbf24) !important;
-  box-shadow: 0 4px 24px rgba(245, 158, 11, 0.45) !important;
-  transform: translateY(-1px) !important;
+  background: #334155 !important;
+  border-color: #00f0ff !important; /* Glowing clean teal focus */
+  color: #fff !important;
+  box-shadow: 0 0 12px rgba(0, 240, 255, 0.2) !important;
+  transform: none !important;
 }
 
 .org-dashboard .nexus-btn.ghost {
-  border: 1px solid rgba(245, 158, 11, 0.3) !important;
-  color: rgba(255, 255, 255, 0.9) !important;
-  background: rgba(245, 158, 11, 0.05) !important;
+  border: 1px solid #1e293b !important;
+  color: #94a3b8 !important;
+  background: transparent !important;
 }
 
 .org-dashboard .nexus-btn.ghost:hover {
-  background: rgba(245, 158, 11, 0.12) !important;
-  border-color: #f59e0b !important;
+  background: rgba(255, 255, 255, 0.03) !important;
+  border-color: #334155 !important;
   color: #fff !important;
 }
 

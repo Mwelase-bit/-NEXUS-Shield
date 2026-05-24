@@ -246,11 +246,11 @@ export default function OrgDashboard() {
           <h3>Risk History Timeline</h3>
           <ResponsiveContainer width="100%" height={180}>
             <LineChart data={org.stats.riskTrend}>
-              <CartesianGrid stroke="rgba(245, 158, 11, 0.15)" />
-              <XAxis dataKey="month" tick={{ fill: '#FFB800' }} />
-              <YAxis tick={{ fill: '#FFB800' }} />
+              <CartesianGrid stroke="rgba(255, 255, 255, 0.04)" />
+              <XAxis dataKey="month" tick={{ fill: '#64748B' }} />
+              <YAxis tick={{ fill: '#64748B' }} />
               <Tooltip />
-              <Line type="monotone" dataKey="risk" stroke="#F59E0B" strokeWidth={2.5} />
+              <Line type="monotone" dataKey="risk" stroke="#38BDF8" strokeWidth={2} />
             </LineChart>
           </ResponsiveContainer>
         </section>
@@ -260,13 +260,13 @@ export default function OrgDashboard() {
           <h3>Department Risk Exposure (Click to filter employee records)</h3>
           <ResponsiveContainer width="100%" height={180}>
             <BarChart data={org.stats.departments}>
-              <CartesianGrid stroke="rgba(245, 158, 11, 0.15)" />
-              <XAxis dataKey="name" tick={{ fill: '#FFB800', fontSize: 10 }} />
-              <YAxis tick={{ fill: '#FFB800' }} />
+              <CartesianGrid stroke="rgba(255, 255, 255, 0.04)" />
+              <XAxis dataKey="name" tick={{ fill: '#64748B', fontSize: 10 }} />
+              <YAxis tick={{ fill: '#64748B' }} />
               <Tooltip />
               <Bar dataKey="risk" onClick={(d) => setDeptFilter(d.name)} cursor="pointer">
                 {org.stats.departments.map((e, i) => (
-                  <Cell key={i} fill={e.risk > 70 ? '#FF2A54' : e.risk > 50 ? '#F59E0B' : '#10B981'} />
+                  <Cell key={i} fill={e.risk > 70 ? '#EF4444' : e.risk > 50 ? '#F59E0B' : '#10B981'} />
                 ))}
               </Bar>
             </BarChart>
