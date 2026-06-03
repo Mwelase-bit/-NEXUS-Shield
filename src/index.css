@@ -3443,5 +3443,50 @@ body,
   color: #fff !important;
 }
 
+/* 6. Organisation Dashboard Tabs */
+.org-tabs {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #1e293b;
+  padding-bottom: 0.5rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+.org-tab-btn {
+  background: none !important;
+  border: none !important;
+  color: #64748b !important;
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 0.5rem 1rem !important;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.org-tab-btn:hover {
+  color: #cbd5e1 !important;
+}
+
+.org-tab-btn.active {
+  color: #38bdf8 !important;
+  text-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+}
+
+.org-tab-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: -0.6rem;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #38bdf8;
+  box-shadow: 0 0 8px #38bdf8;
+}
+
 
 

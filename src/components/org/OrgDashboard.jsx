@@ -18,6 +18,7 @@ import { useGame } from '../../context/GameContext';
 export default function OrgDashboard() {
   const { state, dispatch } = useGame();
   const { org } = state;
+  const [activeTab, setActiveTab] = useState('Analyze'); // 'Analyze' | 'Predict' | 'Act'
   const [drillType, setDrillType] = useState('Phishing Campaign');
   const [targetDept, setTargetDept] = useState('all');
   const [loading, setLoading] = useState(false);
@@ -236,257 +237,290 @@ export default function OrgDashboard() {
         </div>
       </header>
 
-      <div className="org-grid">
-        {/* Risk Gauge Card */}
-        <section className="org-card gauge-card">
-          <h3>Terminal Risk Index</h3>
-          <div className="risk-gauge" style={{ '--risk-color': riskColor }}>
-            <svg viewBox="0 0 120 120">
-              <circle cx="60" cy="60" r="50" fill="none" stroke="#1B3A5C" strokeWidth="10" />
-              <circle
-                cx="60"
-                cy="60"
-                r="50"
-                fill="none"
-                stroke={riskColor}
-                strokeWidth="10"
-                strokeDasharray={`${org.stats.riskScore * 3.14} 314`}
-                transform="rotate(-90 60 60)"
-              />
-            </svg>
-            <span className="gauge-value">{org.stats.riskScore}%</span>
-          </div>
-          <div className="org-stats-row">
-            <div><Users size={16} /><strong>{org.stats.totalEmployees}</strong><small>Port Staff</small></div>
-            <div><Play size={16} /><strong>{org.stats.simulationsRun}</strong><small>Drills Run</small></div>
-            <div><span className="pass">{org.stats.passRate}%</span><small>Pass Rate</small></div>
-            <div><span className="fail">{org.stats.failRate}%</span><small>Fail Rate</small></div>
-          </div>
-        </section>
-
-        {/* Risk History Timeline */}
-        <section className="org-card">
-          <h3>Risk History Timeline</h3>
-          <ResponsiveContainer width="100%" height={180}>
-            <LineChart data={org.stats.riskTrend}>
-              <CartesianGrid stroke="rgba(255, 255, 255, 0.04)" />
-              <XAxis dataKey="month" tick={{ fill: '#64748B' }} />
-              <YAxis tick={{ fill: '#64748B' }} />
-              <Tooltip />
-              <Line type="monotone" dataKey="risk" stroke="#38BDF8" strokeWidth={2} />
-            </LineChart>
-          </ResponsiveContainer>
-        </section>
-
-        {/* Department Card */}
-        <section className="org-card wide">
-          <h3>Terminal Department Risk Exposure (Click to filter staff records)</h3>
-          <ResponsiveContainer width="100%" height={180}>
-            <BarChart data={org.stats.departments}>
-              <CartesianGrid stroke="rgba(255, 255, 255, 0.04)" />
-              <XAxis dataKey="name" tick={{ fill: '#64748B', fontSize: 10 }} />
-              <YAxis tick={{ fill: '#64748B' }} />
-              <Tooltip />
-              <Bar dataKey="risk" onClick={(d) => setDeptFilter(d.name)} cursor="pointer">
-                {org.stats.departments.map((e, i) => (
-                  <Cell key={i} fill={e.risk > 70 ? '#EF4444' : e.risk > 50 ? '#F59E0B' : '#10B981'} />
-                ))}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
-        </section>
-
-        {/* Simulation Control Card */}
-        <section className="org-card">
-          <h3>Launch Port Security Simulation Drill</h3>
-
-          <div className="form-group">
-            <label>Drill / Attack Vector Selection</label>
-            <select value={drillType} onChange={(e) => setDrillType(e.target.value)}>
-              {['Phishing Campaign', 'SCADA Intrusion Drill', 'Ransomware Containment', 'Manifest Tampering Sim', 'Threat Hunt'].map((t) => (
-                <option key={t}>{t}</option>
-              ))}
-            </select>
-          </div>
-
-          <div className="form-group">
-            <label>Target Operational Scope</label>
-            <select value={targetDept} onChange={(e) => setTargetDept(e.target.value)}>
-              <option value="all">Entire Terminal</option>
-              <option value="Customs">Customs & Documentation</option>
-              <option value="Port Admin">Port Administration</option>
-              <option value="Crane Ops">Crane Operations</option>
-            </select>
-          </div>
-
-          <button type="button" className="nexus-btn primary" onClick={handleOpenGate} disabled={loading}>
-            <Play size={16} /> Initialise Authorization Check
-          </button>
-        </section>
-
-        {/* Active Simulation board (Phase indicators) */}
-        <section className="org-card wide">
-          <h3>Active Simulation Dashboard</h3>
-          {activeDrill ? (
-            <div className="active-drill-panel">
-              <div className="drill-meta">
-                <span>Active: <strong>{activeDrill.type}</strong> (Scope: {targetDept})</span>
-                <span className="drill-status blink">EXECUTING PIPELINE</span>
-              </div>
-              
-              {/* Phase timeline indicators */}
-              <div className="drill-phases">
-                <div className={`phase-step ${drillPhase >= 1 ? 'active' : ''} ${drillPhase === 1 ? 'current' : ''}`}>
-                  <span className="step-num">1</span>
-                  <span className="step-name">INGEST</span>
-                </div>
-                <div className={`phase-step ${drillPhase >= 2 ? 'active' : ''} ${drillPhase === 2 ? 'current' : ''}`}>
-                  <span className="step-num">2</span>
-                  <span className="step-name">EXPLOIT</span>
-                </div>
-                <div className={`phase-step ${drillPhase >= 3 ? 'active' : ''} ${drillPhase === 3 ? 'current' : ''}`}>
-                  <span className="step-num">3</span>
-                  <span className="step-name">CONTAIN</span>
-                </div>
-                <div className={`phase-step ${drillPhase >= 4 ? 'active' : ''} ${drillPhase === 4 ? 'current' : ''}`}>
-                  <span className="step-num">4</span>
-                  <span className="step-name">COMPLETE</span>
-                </div>
-              </div>
-
-              {/* Execution scrolling logs */}
-              <div className="drill-console">
-                {drillLogs.map((log, i) => (
-                  <p key={i} className="console-line">{log}</p>
-                ))}
-              </div>
-            </div>
-          ) : (
-            <div className="empty-drill muted">
-              <ShieldAlert size={36} />
-              <p>No drills actively executing. Authorise and launch a simulation to see the phase tracker board.</p>
-            </div>
-          )}
-        </section>
-
-        {/* AI Retraining & Defensive Performance Card */}
-        <section className="org-card">
-          <h3>AI Defensive Retraining Loop</h3>
-          <div className="retraining-grid">
-            <div className="model-stat-row">
-              <span>Graph Neural Network Accuracy</span>
-              <strong className="green-text">{modelMetrics.gnnAccuracy}%</strong>
-            </div>
-            <div className="model-stat-row">
-              <span>GNN Topology statistical drift</span>
-              <strong className="cyan-text">{modelMetrics.gnnDrift}</strong>
-            </div>
-            <div className="model-stat-row">
-              <span>Behavioural Sequence Model Acc</span>
-              <strong className="green-text">{modelMetrics.transformerAcc}%</strong>
-            </div>
-            <div className="model-stat-row">
-              <span>Unsupervised Isolation Forest Acc</span>
-              <strong className="green-text">{modelMetrics.isolationAcc}%</strong>
-            </div>
-          </div>
-          
-          <button type="button" className="nexus-btn primary full-width m-t-15" onClick={handleRecalibrate} disabled={recalibrating}>
-            <RefreshCw size={14} className={recalibrating ? 'animate-spin' : ''} /> 
-            {recalibrating ? 'Running Model Retro Loops...' : 'Recalibrate AI Defensive Models'}
-          </button>
-        </section>
-
-        {/* AI Strategic Risk Report Card */}
-        <section className="org-card">
-          <h3>AI Compliance & Strategic Insight</h3>
-          {org.riskAnalysis ? (
-            <div className="risk-analysis-text">
-              <p className="risk-level-tag">Risk Outlook: {org.riskAnalysis.overall_risk_level}</p>
-              <ul className="bullet-insights">
-                {org.riskAnalysis.key_findings?.map((f, i) => <li key={i}>{f}</li>)}
-              </ul>
-              <h4>Priority Actions</h4>
-              <ul className="bullet-insights">
-                {org.riskAnalysis.priority_recommendations?.map((r, i) => <li key={i}>{r}</li>)}
-              </ul>
-            </div>
-          ) : (
-            <p className="muted">Fetching strategic risk outlook...</p>
-          )}
-          <button type="button" className="nexus-btn ghost full-width m-t-15" onClick={exportPdf}>
-            <FileText size={16} /> Export IMO / POPIA Compliance Audit PDF
-          </button>
-        </section>
-
-        {/* Employee Records Card */}
-        <section className="org-card wide">
-          <h3>Port Staff Risk Exposure Table {deptFilter && `— ${deptFilter}`}</h3>
-          <div className="table-header-filter">
-            <small>Showing records in compliance with South African POPIA data subject rights.</small>
-            {deptFilter && <button onClick={() => setDeptFilter(null)}>Clear filter</button>}
-          </div>
-          <table className="emp-table">
-            <thead>
-              <tr>
-                <th>Employee Name</th>
-                <th>Department</th>
-                <th>Last Sim Date</th>
-                <th>Sim Outcome</th>
-                <th>Training Program</th>
-                <th>Risk Exposure</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredEmployees
-                .sort((a, b) => b.risk - a.risk)
-                .map((e) => (
-                  <tr key={e.id} className={e.risk >= 70 ? 'high-risk' : ''}>
-                    <td>{e.name}</td>
-                    <td>{e.department}</td>
-                    <td>{e.lastSim}</td>
-                    <td className={e.result === 'FAIL' ? 'fail-tag' : 'pass-tag'}>{e.result}</td>
-                    <td>{e.training}</td>
-                    <td>
-                      <span className={`risk-pill ${e.risk >= 70 ? 'critical' : ''}`}>{e.risk}%</span>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
-        </section>
+      {/* Tab Navigation */}
+      <div className="org-tabs">
+        <button
+          type="button"
+          className={`org-tab-btn ${activeTab === 'Analyze' ? 'active' : ''}`}
+          onClick={() => setActiveTab('Analyze')}
+        >
+          ANALYZE
+        </button>
+        <button
+          type="button"
+          className={`org-tab-btn ${activeTab === 'Predict' ? 'active' : ''}`}
+          onClick={() => setActiveTab('Predict')}
+        >
+          PREDICT
+        </button>
+        <button
+          type="button"
+          className={`org-tab-btn ${activeTab === 'Act' ? 'active' : ''}`}
+          onClick={() => setActiveTab('Act')}
+        >
+          ACT
+        </button>
       </div>
 
-      {/* RBAC Crane Command Demo — Separation of Duties enforced server-side */}
-      <div className="org-grid" style={{ marginTop: 0, paddingTop: 0 }}>
-        <section className="org-card wide">
-          <h3><Anchor size={16} style={{ display: 'inline', marginRight: 8 }} />RBAC Demo — Emergency Crane Halt (Server-Side Separation of Duties)</h3>
-          <p className="muted" style={{ marginBottom: 12 }}>
-            Issuing an emergency crane halt is a privileged action. The proxy enforces RBAC — only <strong>Security Analyst</strong> and <strong>Port Administrator</strong> roles are authorised. Test both outcomes below.
-          </p>
-          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginBottom: 12 }}>
-            <button type="button" className="nexus-btn primary" onClick={() => handleCraneCommand('Security Analyst')} disabled={craneLoading}>
-              Issue Halt as Security Analyst (should succeed)
-            </button>
-            <button type="button" className="nexus-btn ghost" onClick={() => handleCraneCommand('Crane Operator')} disabled={craneLoading}>
-              Issue Halt as Crane Operator (should be denied)
-            </button>
-            <button type="button" className="nexus-btn ghost" onClick={() => handleCraneCommand('Port Administrator')} disabled={craneLoading}>
-              Issue Halt as Port Administrator (should succeed)
-            </button>
-          </div>
-          {craneLoading && <p className="muted">Sending to proxy...</p>}
-          {craneResult && (
-            <div className={`security-alert ${craneResult.status === 200 ? 'pass' : 'fail'}`} style={{ marginTop: 8 }}>
-              <strong>HTTP {craneResult.status}</strong>
-              {craneResult.status === 200
-                ? <span> — {craneResult.status}: CRANE HALT ISSUED ✓ (operator: {craneResult.operator})</span>
-                : <span> — {craneResult.error}: {craneResult.detail}</span>
-              }
+      {activeTab === 'Analyze' && (
+        <div className="org-grid">
+          {/* Risk Gauge Card */}
+          <section className="org-card gauge-card">
+            <h3>Terminal Risk Index</h3>
+            <div className="risk-gauge" style={{ '--risk-color': riskColor }}>
+              <svg viewBox="0 0 120 120">
+                <circle cx="60" cy="60" r="50" fill="none" stroke="#1B3A5C" strokeWidth="10" />
+                <circle
+                  cx="60"
+                  cy="60"
+                  r="50"
+                  fill="none"
+                  stroke={riskColor}
+                  strokeWidth="10"
+                  strokeDasharray={`${org.stats.riskScore * 3.14} 314`}
+                  transform="rotate(-90 60 60)"
+                />
+              </svg>
+              <span className="gauge-value">{org.stats.riskScore}%</span>
             </div>
-          )}
-        </section>
-      </div>
+            <div className="org-stats-row">
+              <div><Users size={16} /><strong>{org.stats.totalEmployees}</strong><small>Port Staff</small></div>
+              <div><Play size={16} /><strong>{org.stats.simulationsRun}</strong><small>Drills Run</small></div>
+              <div><span className="pass">{org.stats.passRate}%</span><small>Pass Rate</small></div>
+              <div><span className="fail">{org.stats.failRate}%</span><small>Fail Rate</small></div>
+            </div>
+          </section>
+
+          {/* Risk History Timeline */}
+          <section className="org-card">
+            <h3>Risk History Timeline</h3>
+            <ResponsiveContainer width="100%" height={180}>
+              <LineChart data={org.stats.riskTrend}>
+                <CartesianGrid stroke="rgba(255, 255, 255, 0.04)" />
+                <XAxis dataKey="month" tick={{ fill: '#64748B' }} />
+                <YAxis tick={{ fill: '#64748B' }} />
+                <Tooltip />
+                <Line type="monotone" dataKey="risk" stroke="#38BDF8" strokeWidth={2} />
+              </LineChart>
+            </ResponsiveContainer>
+          </section>
+
+          {/* Department Card */}
+          <section className="org-card wide">
+            <h3>Terminal Department Risk Exposure (Click to filter staff records)</h3>
+            <ResponsiveContainer width="100%" height={180}>
+              <BarChart data={org.stats.departments}>
+                <CartesianGrid stroke="rgba(255, 255, 255, 0.04)" />
+                <XAxis dataKey="name" tick={{ fill: '#64748B', fontSize: 10 }} />
+                <YAxis tick={{ fill: '#64748B' }} />
+                <Tooltip />
+                <Bar dataKey="risk" onClick={(d) => setDeptFilter(d.name)} cursor="pointer">
+                  {org.stats.departments.map((e, i) => (
+                    <Cell key={i} fill={e.risk > 70 ? '#EF4444' : e.risk > 50 ? '#F59E0B' : '#10B981'} />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </section>
+
+          {/* Employee Records Card */}
+          <section className="org-card wide">
+            <h3>Port Staff Risk Exposure Table {deptFilter && `— ${deptFilter}`}</h3>
+            <div className="table-header-filter">
+              <small>Showing records in compliance with South African POPIA data subject rights.</small>
+              {deptFilter && <button onClick={() => setDeptFilter(null)}>Clear filter</button>}
+            </div>
+            <table className="emp-table">
+              <thead>
+                <tr>
+                  <th>Employee Name</th>
+                  <th>Department</th>
+                  <th>Last Sim Date</th>
+                  <th>Sim Outcome</th>
+                  <th>Training Program</th>
+                  <th>Risk Exposure</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredEmployees
+                  .sort((a, b) => b.risk - a.risk)
+                  .map((e) => (
+                    <tr key={e.id} className={e.risk >= 70 ? 'high-risk' : ''}>
+                      <td>{e.name}</td>
+                      <td>{e.department}</td>
+                      <td>{e.lastSim}</td>
+                      <td className={e.result === 'FAIL' ? 'fail-tag' : 'pass-tag'}>{e.result}</td>
+                      <td>{e.training}</td>
+                      <td>
+                        <span className={`risk-pill ${e.risk >= 70 ? 'critical' : ''}`}>{e.risk}%</span>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </section>
+        </div>
+      )}
+
+      {activeTab === 'Predict' && (
+        <div className="org-grid">
+          {/* AI Retraining & Defensive Performance Card */}
+          <section className="org-card">
+            <h3>AI Defensive Retraining Loop</h3>
+            <div className="retraining-grid">
+              <div className="model-stat-row">
+                <span>Graph Neural Network Accuracy</span>
+                <strong className="green-text">{modelMetrics.gnnAccuracy}%</strong>
+              </div>
+              <div className="model-stat-row">
+                <span>GNN Topology statistical drift</span>
+                <strong className="cyan-text">{modelMetrics.gnnDrift}</strong>
+              </div>
+              <div className="model-stat-row">
+                <span>Behavioural Sequence Model Acc</span>
+                <strong className="green-text">{modelMetrics.transformerAcc}%</strong>
+              </div>
+              <div className="model-stat-row">
+                <span>Unsupervised Isolation Forest Acc</span>
+                <strong className="green-text">{modelMetrics.isolationAcc}%</strong>
+              </div>
+            </div>
+            
+            <button type="button" className="nexus-btn primary full-width m-t-15" onClick={handleRecalibrate} disabled={recalibrating}>
+              <RefreshCw size={14} className={recalibrating ? 'animate-spin' : ''} /> 
+              {recalibrating ? 'Running Model Retro Loops...' : 'Recalibrate AI Defensive Models'}
+            </button>
+          </section>
+
+          {/* AI Strategic Risk Report Card */}
+          <section className="org-card">
+            <h3>AI Compliance & Strategic Insight</h3>
+            {org.riskAnalysis ? (
+              <div className="risk-analysis-text">
+                <p className="risk-level-tag">Risk Outlook: {org.riskAnalysis.overall_risk_level}</p>
+                <ul className="bullet-insights">
+                  {org.riskAnalysis.key_findings?.map((f, i) => <li key={i}>{f}</li>)}
+                </ul>
+                <h4>Priority Actions</h4>
+                <ul className="bullet-insights">
+                  {org.riskAnalysis.priority_recommendations?.map((r, i) => <li key={i}>{r}</li>)}
+                </ul>
+              </div>
+            ) : (
+              <p className="muted">Fetching strategic risk outlook...</p>
+            )}
+            <button type="button" className="nexus-btn ghost full-width m-t-15" onClick={exportPdf}>
+              <FileText size={16} /> Export IMO / POPIA Compliance Audit PDF
+            </button>
+          </section>
+        </div>
+      )}
+
+      {activeTab === 'Act' && (
+        <div className="org-grid">
+          {/* Simulation Control Card */}
+          <section className="org-card">
+            <h3>Launch Port Security Simulation Drill</h3>
+
+            <div className="form-group">
+              <label>Drill / Attack Vector Selection</label>
+              <select value={drillType} onChange={(e) => setDrillType(e.target.value)}>
+                {['Phishing Campaign', 'SCADA Intrusion Drill', 'Ransomware Containment', 'Manifest Tampering Sim', 'Threat Hunt'].map((t) => (
+                  <option key={t}>{t}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label>Target Operational Scope</label>
+              <select value={targetDept} onChange={(e) => setTargetDept(e.target.value)}>
+                <option value="all">Entire Terminal</option>
+                <option value="Customs">Customs & Documentation</option>
+                <option value="Port Admin">Port Administration</option>
+                <option value="Crane Ops">Crane Operations</option>
+              </select>
+            </div>
+
+            <button type="button" className="nexus-btn primary" onClick={handleOpenGate} disabled={loading}>
+              <Play size={16} /> Initialise Authorization Check
+            </button>
+          </section>
+
+          {/* Active Simulation board (Phase indicators) */}
+          <section className="org-card wide">
+            <h3>Active Simulation Dashboard</h3>
+            {activeDrill ? (
+              <div className="active-drill-panel">
+                <div className="drill-meta">
+                  <span>Active: <strong>{activeDrill.type}</strong> (Scope: {targetDept})</span>
+                  <span className="drill-status blink">EXECUTING PIPELINE</span>
+                </div>
+                
+                {/* Phase timeline indicators */}
+                <div className="drill-phases">
+                  <div className={`phase-step ${drillPhase >= 1 ? 'active' : ''} ${drillPhase === 1 ? 'current' : ''}`}>
+                    <span className="step-num">1</span>
+                    <span className="step-name">INGEST</span>
+                  </div>
+                  <div className={`phase-step ${drillPhase >= 2 ? 'active' : ''} ${drillPhase === 2 ? 'current' : ''}`}>
+                    <span className="step-num">2</span>
+                    <span className="step-name">EXPLOIT</span>
+                  </div>
+                  <div className={`phase-step ${drillPhase >= 3 ? 'active' : ''} ${drillPhase === 3 ? 'current' : ''}`}>
+                    <span className="step-num">3</span>
+                    <span className="step-name">CONTAIN</span>
+                  </div>
+                  <div className={`phase-step ${drillPhase >= 4 ? 'active' : ''} ${drillPhase === 4 ? 'current' : ''}`}>
+                    <span className="step-num">4</span>
+                    <span className="step-name">COMPLETE</span>
+                  </div>
+                </div>
+
+                {/* Execution scrolling logs */}
+                <div className="drill-console">
+                  {drillLogs.map((log, i) => (
+                    <p key={i} className="console-line">{log}</p>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <div className="empty-drill muted">
+                <ShieldAlert size={36} />
+                <p>No drills actively executing. Authorise and launch a simulation to see the phase tracker board.</p>
+              </div>
+            )}
+          </section>
+
+          {/* RBAC Crane Command Demo — Separation of Duties enforced server-side */}
+          <section className="org-card wide">
+            <h3><Anchor size={16} style={{ display: 'inline', marginRight: 8 }} />RBAC Demo — Emergency Crane Halt (Server-Side Separation of Duties)</h3>
+            <p className="muted" style={{ marginBottom: 12 }}>
+              Issuing an emergency crane halt is a privileged action. The proxy enforces RBAC — only <strong>Security Analyst</strong> and <strong>Port Administrator</strong> roles are authorised. Test both outcomes below.
+            </p>
+            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginBottom: 12 }}>
+              <button type="button" className="nexus-btn primary" onClick={() => handleCraneCommand('Security Analyst')} disabled={craneLoading}>
+                Issue Halt as Security Analyst (should succeed)
+              </button>
+              <button type="button" className="nexus-btn ghost" onClick={() => handleCraneCommand('Crane Operator')} disabled={craneLoading}>
+                Issue Halt as Crane Operator (should be denied)
+              </button>
+              <button type="button" className="nexus-btn ghost" onClick={() => handleCraneCommand('Port Administrator')} disabled={craneLoading}>
+                Issue Halt as Port Administrator (should succeed)
+              </button>
+            </div>
+            {craneLoading && <p className="muted">Sending to proxy...</p>}
+            {craneResult && (
+              <div className={`security-alert ${craneResult.status === 200 ? 'pass' : 'fail'}`} style={{ marginTop: 8 }}>
+                <strong>HTTP {craneResult.status}</strong>
+                {craneResult.status === 200
+                  ? <span> — {craneResult.status}: CRANE HALT ISSUED ✓ (operator: {craneResult.operator})</span>
+                  : <span> — {craneResult.error}: {craneResult.detail}</span>
+                }
+              </div>
+            )}
+          </section>
+        </div>
+      )}
 
       {/* Campaign Authorisation Gate Modal (POPIA & Cybercrimes Mandate Check) */}
       {showLegalGate && (
