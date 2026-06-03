@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import {
   BarChart,
   Bar,
@@ -14,6 +14,88 @@ import {
 import { Play, FileText, Users, AlertOctagon, Scale, ShieldAlert, CheckCircle2, RotateCw, RefreshCw, Anchor } from 'lucide-react';
 import { generatePhishingSim, analyzeOrgRisk } from '../../services/claude';
 import { useGame } from '../../context/GameContext';
+
+function SystemNarratorConsole() {
+  const [narratives, setNarratives] = useState([
+    { type: 'DETECTING', text: 'Scanning TOS Hub database nodes for anomalies...', timestamp: '07:32:00', badge: 'detect' },
+    { type: 'NARRATING', text: 'AI Analyst: Port operations operating at nominal latency. 312 active entities verified.', timestamp: '07:32:04', badge: 'narrate' },
+    { type: 'RESPONDING', text: 'Auto-Shield: Continuous integrity checks active. System secure.', timestamp: '07:32:10', badge: 'respond' }
+  ]);
+  const consoleEndRef = useRef(null);
+
+  const scenarioIndex = useRef(0);
+  const phaseIndex = useRef(0);
+
+  const scenarios = [
+    [
+      { type: 'DETECTING', text: '[TELEMETRY] Anomalous credential stuffing flagged on Port Gate network card.', badge: 'detect' },
+      { type: 'NARRATING', text: '[AI NARRATIVE] Multiple rapid badging failures on reader-02-dct suggest active badge credential harvesting targeting Durban Port Gate.', badge: 'narrate' },
+      { type: 'RESPONDING', text: '[AUTONOMOUS ACTION] Applied temporary IP ban on external routing gate, notified gate supervisor to inspect physical credentials.', badge: 'respond' }
+    ],
+    [
+      { type: 'DETECTING', text: '[TELEMETRY] Outbound C2 beacon detected on SCADA VLAN originating from Quay Crane QC-04 controller.', badge: 'detect' },
+      { type: 'NARRATING', text: '[AI NARRATIVE] The beacon payload matches known lateral movement patterns observed in the 2021 Transnet ransomware attack.', badge: 'narrate' },
+      { type: 'RESPONDING', text: '[AUTONOMOUS ACTION] Isolated the Quay Crane SCADA subnet via virtual router ACL. Enforced privilege verification.', badge: 'respond' }
+    ],
+    [
+      { type: 'DETECTING', text: '[TELEMETRY] Out-of-hours manifest database query initiated from Customs account (m.santos).', badge: 'detect' },
+      { type: 'NARRATING', text: '[AI NARRATIVE] Unscheduled database queries target container cargo release flags — possible customs fraud manifest tampering.', badge: 'narrate' },
+      { type: 'RESPONDING', text: '[AUTONOMOUS ACTION] Enforced immediate MFA authentication challenge and locked cargo release privileges pending supervisor approval.', badge: 'respond' }
+    ],
+    [
+      { type: 'DETECTING', text: '[TELEMETRY] Port Cloud Storage API endpoint overwhelmed with backup deletion commands.', badge: 'detect' },
+      { type: 'NARRATING', text: '[AI NARRATIVE] Attacker attempting backup erasure to increase ransomware leverage. High severity attack vector.', badge: 'narrate' },
+      { type: 'RESPONDING', text: '[AUTONOMOUS ACTION] Triggered immutable backup lock. Switched storage nodes to read-only failover state.', badge: 'respond' }
+    ]
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const currentScenario = scenarios[scenarioIndex.current];
+      const step = currentScenario[phaseIndex.current];
+
+      const now = new Date();
+      const timeStr = now.toTimeString().split(' ')[0];
+
+      setNarratives((prev) => [
+        ...prev.slice(-8),
+        { ...step, timestamp: timeStr }
+      ]);
+
+      if (phaseIndex.current < 2) {
+        phaseIndex.current += 1;
+      } else {
+        phaseIndex.current = 0;
+        scenarioIndex.current = (scenarioIndex.current + 1) % scenarios.length;
+      }
+    }, 4500);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    consoleEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [narratives]);
+
+  return (
+    <div className="system-narrator-console">
+      <div className="console-title-row">
+        <span className="console-title blink-slow">AUTONOMOUS CYBER INTELLIGENCE FEED (ACCIS)</span>
+        <span className="live-tag">LIVE FEED</span>
+      </div>
+      <div className="console-body">
+        {narratives.map((n, idx) => (
+          <div key={idx} className={`console-row ${n.badge}`}>
+            <span className="time">{n.timestamp}</span>
+            <span className={`badge ${n.badge}`}>{n.type}</span>
+            <span className="text">{n.text}</span>
+          </div>
+        ))}
+        <div ref={consoleEndRef} />
+      </div>
+    </div>
+  );
+}
 
 export default function OrgDashboard() {
   const { state, dispatch } = useGame();
@@ -305,6 +387,11 @@ export default function OrgDashboard() {
             </ResponsiveContainer>
           </section>
 
+          {/* Live ACCIS Anomaly Ticker */}
+          <section className="org-card wide">
+            <SystemNarratorConsole />
+          </section>
+
           {/* Department Card */}
           <section className="org-card wide">
             <h3>Terminal Department Risk Exposure (Click to filter staff records)</h3>
@@ -413,6 +500,11 @@ export default function OrgDashboard() {
               <FileText size={16} /> Export IMO / POPIA Compliance Audit PDF
             </button>
           </section>
+
+          {/* System Narrator Console */}
+          <section className="org-card wide">
+            <SystemNarratorConsole />
+          </section>
         </div>
       )}
 
@@ -489,6 +581,11 @@ export default function OrgDashboard() {
                 <p>No drills actively executing. Authorise and launch a simulation to see the phase tracker board.</p>
               </div>
             )}
+          </section>
+
+          {/* System Narrator Console */}
+          <section className="org-card wide">
+            <SystemNarratorConsole />
           </section>
 
           {/* RBAC Crane Command Demo — Separation of Duties enforced server-side */}

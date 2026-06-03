@@ -3488,5 +3488,129 @@ body,
   box-shadow: 0 0 8px #38bdf8;
 }
 
+/* 7. System Anomaly & Narrative Console CSS */
+.system-narrator-console {
+  background: #070f1e !important;
+  border: 1px solid #1e293b !important;
+  border-radius: 8px;
+  padding: 1rem;
+  font-family: monospace;
+  box-shadow: inset 0 0 15px rgba(56, 189, 248, 0.05), 0 4px 20px rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  height: 240px;
+}
+
+.console-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(27, 58, 92, 0.4);
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.console-title {
+  color: #94a3b8;
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+}
+
+.live-tag {
+  color: #ef4444;
+  font-size: 0.65rem;
+  font-weight: 700;
+  background: rgba(239, 68, 68, 0.1);
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.console-body {
+  overflow-y: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+/* Custom scrollbar for console body */
+.console-body::-webkit-scrollbar {
+  width: 4px;
+}
+.console-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+.console-body::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 2px;
+}
+
+.console-row {
+  font-size: 0.75rem;
+  line-height: 1.5;
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+  padding-bottom: 0.25rem;
+}
+
+.console-row .time {
+  color: #475569;
+  flex-shrink: 0;
+  font-weight: 500;
+}
+
+.console-row .badge {
+  font-weight: 700;
+  font-size: 0.65rem;
+  padding: 1px 6px;
+  border-radius: 3px;
+  text-transform: uppercase;
+  flex-shrink: 0;
+  letter-spacing: 0.03em;
+}
+
+.console-row .badge.detect {
+  background: rgba(56, 189, 248, 0.08);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.2);
+}
+
+.console-row .badge.narrate {
+  background: rgba(168, 85, 247, 0.08);
+  color: #a855f7;
+  border: 1px solid rgba(168, 85, 247, 0.2);
+}
+
+.console-row .badge.respond {
+  background: rgba(16, 185, 129, 0.08);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.console-row .text {
+  color: #e2e8f0;
+}
+
+.console-row.detect .text {
+  color: #38bdf8;
+}
+
+.console-row.respond .text {
+  color: #10b981;
+}
+
+.blink-slow {
+  animation: blinker 2.5s linear infinite;
+}
+
+@keyframes blinker {
+  50% { opacity: 0.5; }
+}
+
 
 
