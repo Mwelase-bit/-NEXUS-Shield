@@ -1,10 +1,10 @@
-/** NEXUS Shield — City Configuration & Mission Narratives */
+/** PORT-NEXUS Shield — City Configuration & Mission Narratives */
 
 export const DISTRICTS = {
   GATE: {
     id: 'GATE',
-    name: 'The Gate',
-    subtitle: 'Identity & Access',
+    name: 'Port Gate',
+    subtitle: 'Access Control & Identity',
     position: [-12, 0, -8],
     approach: [-9, 0, -6],
     color: '#00B4D8',
@@ -14,8 +14,8 @@ export const DISTRICTS = {
   },
   CORE: {
     id: 'CORE',
-    name: 'The Core',
-    subtitle: 'Data Infrastructure',
+    name: 'TOS Hub',
+    subtitle: 'Terminal Operating System',
     position: [0, 0, 0],
     approach: [0, 0, 4],
     color: '#00FFE5',
@@ -25,8 +25,8 @@ export const DISTRICTS = {
   },
   VAULT: {
     id: 'VAULT',
-    name: 'The Vault',
-    subtitle: 'Data Protection',
+    name: 'Manifests',
+    subtitle: 'Customs & Documentation',
     position: [12, 0, -8],
     approach: [9, 0, -5],
     color: '#FFB800',
@@ -36,8 +36,8 @@ export const DISTRICTS = {
   },
   CLOUD: {
     id: 'CLOUD',
-    name: 'Cloud District',
-    subtitle: 'Cloud Infrastructure',
+    name: 'Port Cloud',
+    subtitle: 'Remote Infrastructure',
     position: [-10, 0, 10],
     approach: [-7, 0, 8],
     color: '#7B2FFF',
@@ -47,8 +47,8 @@ export const DISTRICTS = {
   },
   OUTPOST: {
     id: 'OUTPOST',
-    name: 'The Outpost',
-    subtitle: 'Remote Endpoints',
+    name: 'Quay Crane',
+    subtitle: 'SCADA & Crane Control',
     position: [12, 0, 10],
     approach: [9, 0, 8],
     color: '#00FF94',
@@ -58,8 +58,8 @@ export const DISTRICTS = {
   },
   BRIDGE: {
     id: 'BRIDGE',
-    name: 'The Bridge',
-    subtitle: 'Integration Hub',
+    name: 'Port Comms',
+    subtitle: 'Communications Hub',
     position: [-10, 0, 2],
     approach: [-7, 0, 2],
     color: '#FF6B35',
@@ -69,51 +69,51 @@ export const DISTRICTS = {
   },
 };
 
-/** NPC definitions — one per district */
+/** Port personnel NPCs — one per zone */
 export const NPCS = {
   GATE: {
     id: 'GATE',
-    name: 'Sarah Chen',
-    role: 'Accounts Manager',
+    name: 'Sipho Dlamini',
+    role: 'Gate Security Officer',
     districtId: 'GATE',
-    outfit: 'office', // warm beige/navy
-    skinTone: '#C8956C',
+    outfit: 'office',
+    skinTone: '#7B4F2E',
     clothingColor: '#1B3A5C',
     accentColor: '#00B4D8',
     position: [-10.5, 0, -5.5],
-    missionId: 'phishing_sarah',
-    idlePhrases: ['Everything is fine here!', 'Network is secure.', 'All clear!'],
+    missionId: 'port_phishing',
+    idlePhrases: ['All vehicle access logs clear!', 'Badge readers nominal.', 'Gate secure.'],
   },
   CORE: {
     id: 'CORE',
-    name: 'Dr. Amara Osei',
-    role: 'Database Administrator',
+    name: 'Fatima Hassan',
+    role: 'TOS Systems Engineer',
     districtId: 'CORE',
     outfit: 'labcoat',
-    skinTone: '#7B4F2E',
+    skinTone: '#C8956C',
     clothingColor: '#EAF5FF',
     accentColor: '#00FFE5',
     position: [2.5, 0, 4],
-    missionId: null, // no active mission yet
-    idlePhrases: ['Systems nominal.', 'Database optimised.', 'All queries logged.'],
+    missionId: null,
+    idlePhrases: ['TOS nominal.', 'Vessel schedules synced.', 'All berth assignments logged.'],
   },
   VAULT: {
     id: 'VAULT',
-    name: 'Marcus Webb',
-    role: 'Finance Director',
+    name: 'Ivan Petrov',
+    role: 'Customs Documentation Officer',
     districtId: 'VAULT',
     outfit: 'formal',
     skinTone: '#D4A574',
     clothingColor: '#2C1A4E',
     accentColor: '#FFB800',
     position: [10.5, 0, -5.5],
-    missionId: 'vault_access',
-    idlePhrases: ['Financial data secured.', 'Vault is locked.'],
+    missionId: 'crane_access',
+    idlePhrases: ['Manifests verified.', 'Customs clearance up to date.', 'Documentation secured.'],
   },
   CLOUD: {
     id: 'CLOUD',
     name: 'Zara Mokoena',
-    role: 'Cloud Engineer',
+    role: 'Cloud Infrastructure Manager',
     districtId: 'CLOUD',
     outfit: 'hoodie',
     skinTone: '#8B4513',
@@ -121,25 +121,25 @@ export const NPCS = {
     accentColor: '#7B2FFF',
     position: [-8.5, 0, 8.5],
     missionId: null,
-    idlePhrases: ['Instances are healthy.', 'Auto-scaling active.', 'Cloud is clear!'],
+    idlePhrases: ['Instances healthy.', 'Remote VPN access nominal.', 'Cloud monitoring active.'],
   },
   OUTPOST: {
     id: 'OUTPOST',
-    name: 'Thabo Nkosi',
-    role: 'Remote Developer',
+    name: 'Carlos Mendes',
+    role: 'Quay Crane Operator',
     districtId: 'OUTPOST',
     outfit: 'casual',
-    skinTone: '#5C3317',
+    skinTone: '#D4A574',
     clothingColor: '#1A3C2A',
     accentColor: '#00FF94',
     position: [10.5, 0, 8.5],
-    missionId: 'rogue_device',
-    idlePhrases: ['VPN connected!', 'Working remotely.', 'Endpoint is clean.'],
+    missionId: 'reefer_intrusion',
+    idlePhrases: ['Crane QC-04 nominal.', 'Lift cycles logged.', 'SCADA showing green.'],
   },
   BRIDGE: {
     id: 'BRIDGE',
-    name: 'Priya Patel',
-    role: 'Integration Specialist',
+    name: 'Maria Santos',
+    role: 'Port Communications Officer',
     districtId: 'BRIDGE',
     outfit: 'technical',
     skinTone: '#C8956C',
@@ -147,151 +147,146 @@ export const NPCS = {
     accentColor: '#FF6B35',
     position: [-8.5, 0, 2],
     missionId: null,
-    idlePhrases: ['APIs are responding.', 'Pipelines flowing.', 'Integration healthy.'],
+    idlePhrases: ['VHF channels clear.', 'AIS transponders active.', 'Port comms nominal.'],
   },
 };
 
-/** Full mission narratives — Cloud Quest style 5-step flow */
+/** Full NPC mission narratives — port-themed */
 export const MISSIONS = {
-  phishing_sarah: {
-    id: 'phishing_sarah',
+  port_phishing: {
+    id: 'port_phishing',
     npcId: 'GATE',
     districtId: 'GATE',
-    title: "Sarah's Phishing Incident",
+    title: "The SAMSA Credential Scam",
     xpReward: 1200,
     difficulty: 'Beginner',
 
-    // Step 1 — Problem dialogue
     dialogue: [
       {
-        speaker: 'Sarah Chen',
-        text: "Hi! I got an email earlier that looked like it came from our IT department. It said I needed to reset my password urgently or my account would be locked. I clicked the link and typed in my details...",
+        speaker: 'Sipho Dlamini',
+        text: "I received an email this morning from what looked like SAMSA — the South African Maritime Safety Authority. It said I needed to verify my port access credentials urgently for an IMO compliance audit. I clicked the link and entered my badge login details...",
       },
       {
-        speaker: 'Sarah Chen',
-        text: "But now I'm not sure. The page looked a bit... off. The logo was slightly blurry and the URL didn't look quite right. Did I make a mistake? Am I in trouble?",
+        speaker: 'Sipho Dlamini',
+        text: "But the page looked slightly off. The SAMSA logo had the wrong watermark and the URL showed 'samsa-gov-za.net' instead of 'samsa.org.za'. I think I gave my credentials to a fake site. Could attackers use this to access our gate control systems?",
       },
     ],
 
-    // Step 2 — Learning content
     learn: {
-      title: "What Happened to Sarah?",
-      icon: '🎣',
+      title: "Spear-Phishing Targeting Port Staff",
+      icon: '⚓',
       bullets: [
-        "Phishing emails mimic trusted senders to trick you into revealing credentials",
-        "Real IT departments NEVER ask for passwords via email links",
-        "The fake link led to a credential harvesting page — a clone of the real login",
-        "The blurry logo and unusual URL were red flags Sarah should have spotted",
+        "Port staff are high-value targets — attackers craft maritime-specific lures using SAMSA, IMO, and IMDG notices",
+        "Legitimate authorities like SAMSA never request credential verification via email links",
+        "A cloned page with a slightly wrong domain (samsa-gov-za.net vs samsa.org.za) is classic credential harvesting",
+        "Gate system credentials can unlock vehicle and vessel access — the blast radius is severe",
       ],
-      concept: "Credential Harvesting via Phishing",
+      concept: "Spear-Phishing & Maritime Social Engineering",
     },
 
-    // Step 3 — SOC mission reference
-    socMissionId: 'phishing_sarah_soc',
+    socMissionId: 'port_phishing_soc',
 
-    // Step 4 — Solution debrief talking points
     solutionNotes: [
-      "The email domain was 'it-support.company-helpdesk.net' — not the real company domain",
-      "The login page used HTTP, not HTTPS — a major red flag",
-      "The attacker's IP resolved to a known threat intelligence feed entry",
-      "Resetting Sarah's password and blocking the phishing domain contained the breach",
+      "The sender domain 'samsa-gov-za.net' is not the official SAMSA domain (samsa.org.za) — a typosquat",
+      "The phishing page collected Sipho's gate system credentials over HTTP with a self-signed certificate",
+      "Immediately rotating Sipho's credentials and auditing recent gate access logs contained the breach",
+      "Multi-factor authentication on gate systems would have prevented credential replay even after phishing success",
     ],
 
-    // Step 5 — City reaction
     cityReaction: {
-      message: "Sarah's credentials have been reset and the phishing domain is blocked. The Gate is secure!",
+      message: "Sipho's credentials have been rotated and the phishing domain is blocked. Port Gate access is secured!",
       districtEffect: 'secured',
     },
   },
 
-  vault_access: {
-    id: 'vault_access',
+  crane_access: {
+    id: 'crane_access',
     npcId: 'VAULT',
     districtId: 'VAULT',
-    title: "The 3AM Access Anomaly",
+    title: "The 3AM Manifest Anomaly",
     xpReward: 1500,
     difficulty: 'Intermediate',
 
     dialogue: [
       {
-        speaker: 'Marcus Webb',
-        text: "I was reviewing our security logs this morning and found something very concerning. Our financial database was accessed at 3:17am last night.",
+        speaker: 'Ivan Petrov',
+        text: "I was reviewing the database access logs this morning and found something deeply concerning. Our customs manifest database was accessed at 3:17am by an account I don't recognise — and no one is scheduled to work nights this week.",
       },
       {
-        speaker: 'Marcus Webb',
-        text: "None of my team should be working at that hour. The access used a legitimate account, but the activity pattern is completely abnormal — large data exports, strange query patterns. Something is very wrong.",
+        speaker: 'Ivan Petrov',
+        text: "The account ran bulk export queries on thousands of container records — contents, declared values, shipper details. Over 4 gigabytes left our network. This is exactly the data needed for cargo fraud or container substitution. Something is very wrong.",
       },
     ],
 
     learn: {
-      title: "After-Hours Access Anomalies",
-      icon: '🕐',
+      title: "After-Hours Manifest Database Exfiltration",
+      icon: '📦',
       bullets: [
-        "Legitimate users rarely access sensitive systems at unusual hours without prior notice",
-        "Insider threats and compromised accounts often show abnormal time-based access patterns",
-        "Large unexpected data exports during off-hours are a major red flag for data exfiltration",
-        "User Behaviour Analytics (UBA) tools detect exactly this type of baseline deviation",
+        "Manifest databases contain high-value data: container contents, declared values, shipper details — prime targets for cargo fraud",
+        "Compromised or orphaned customs accounts are routinely exploited for after-hours bulk data theft",
+        "Bulk export queries at off-hours are a key indicator of data exfiltration for manifest tampering or mis-declaration",
+        "User Behaviour Analytics tuned to port shift patterns can detect exactly this type of baseline deviation",
       ],
-      concept: "Insider Threat / Compromised Account Detection",
+      concept: "Insider Threat / Compromised Account in Maritime Logistics",
     },
 
-    socMissionId: 'vault_access_soc',
+    socMissionId: 'crane_access_soc',
 
     solutionNotes: [
-      "The account belonged to a former contractor whose access was never revoked",
-      "Over 2.3GB of financial records were exported to an external IP address",
-      "Suspending the account and preserving forensic logs were the critical first steps",
-      "This is a textbook case of privilege misuse through an orphaned account",
+      "The account belonged to a former logistics contractor — access was never revoked after contract expiry",
+      "Over 15,000 container manifest records were exported to an external IP registered in a known threat actor cluster",
+      "Suspending the account and preserving database audit logs were the critical first steps",
+      "This follows the Transnet 2021 pattern: IT compromise enabling operational disruption via data integrity attacks",
     ],
 
     cityReaction: {
-      message: "The suspicious account has been suspended and forensic evidence preserved. The Vault is locked down!",
+      message: "The compromised account is suspended and forensic logs preserved. Manifest integrity is restored!",
       districtEffect: 'secured',
     },
   },
 
-  rogue_device: {
-    id: 'rogue_device',
+  reefer_intrusion: {
+    id: 'reefer_intrusion',
     npcId: 'OUTPOST',
     districtId: 'OUTPOST',
-    title: "The Unknown Device",
+    title: "The Phantom Crane Command",
     xpReward: 1350,
     difficulty: 'Beginner',
 
     dialogue: [
       {
-        speaker: 'Thabo Nkosi',
-        text: "Hey, I was working from a coffee shop today and connected to the company VPN. Everything seemed fine, but IT just sent me an alert about an unknown device appearing on our internal network.",
+        speaker: 'Carlos Mendes',
+        text: "I was on a scheduled break when I got a critical alert from the crane monitoring dashboard. Crane QC-04 had received a lift command that wasn't in my shift schedule — and the crane started moving. I hadn't authorised anything.",
       },
       {
-        speaker: 'Thabo Nkosi',
-        text: "I didn't connect anything new — it's not mine! Could someone be using the café WiFi to get onto our network? This has me really worried about what I might have exposed.",
+        speaker: 'Carlos Mendes',
+        text: "I hit the physical emergency stop in time. IT is saying an unknown device appeared on the SCADA network segment right before the unauthorised command was issued. What is happening to my crane? Could someone take control remotely?",
       },
     ],
 
     learn: {
-      title: "Rogue Devices & Public WiFi Risks",
-      icon: '📡',
+      title: "Rogue SCADA Commands & OT/IT Network Intrusion",
+      icon: '🏗️',
       bullets: [
-        "Public WiFi networks can be exploited for man-in-the-middle (MitM) attacks",
-        "Attackers can intercept VPN setup traffic to inject rogue devices onto corporate networks",
-        "A device appearing on the network that nobody recognises is an immediate red flag",
-        "All unknown devices must be isolated first — investigate second, never the other way around",
+        "Quay crane SCADA systems increasingly connect to IT networks — creating exploitable attack surfaces attackers can pivot through",
+        "An unauthorised device injecting Modbus/PLC commands onto the SCADA network poses immediate physical safety risk",
+        "The Transnet 2021 ransomware attack demonstrated how IT/OT convergence can halt entire port operations",
+        "Isolate the SCADA segment first — a crane moving under attacker control can damage cargo, vessels, and workers",
       ],
-      concept: "Rogue Device Detection & MitM Attack Prevention",
+      concept: "OT/IT Convergence Attack & SCADA Network Intrusion",
     },
 
-    socMissionId: 'rogue_device_soc',
+    socMissionId: 'reefer_intrusion_soc',
 
     solutionNotes: [
-      "The rogue device had a spoofed MAC address and was communicating with a known C2 server",
-      "Forcing a VPN reconnection with MFA verification ensured Thabo's session was clean",
-      "An endpoint scan on Thabo's machine found no malware — the attack was network-layer only",
-      "Network segmentation would have limited the blast radius of this type of attack",
+      "The rogue device used a spoofed crane controller MAC address and injected Modbus commands via the SCADA VLAN",
+      "Network segmentation between the IT and OT/SCADA VLANs would have prevented lateral movement to crane systems",
+      "The initial vector was a phishing email opened on a PC connected to the same flat network as the crane PLCs",
+      "Physical emergency stops are the last line of defence — digital SCADA network isolation must come first",
     ],
 
     cityReaction: {
-      message: "The rogue device has been isolated and Thabo's connection is secured. The Outpost is defended!",
+      message: "The rogue device is isolated and crane QC-04 is back under authorised control. SCADA network secured!",
       districtEffect: 'secured',
     },
   },
@@ -318,8 +313,8 @@ export function getDistrictApproach(id) {
 
 export function getAuraColor(aura) {
   const map = {
-    cyan: '#00B4D8',
-    green: '#00FF94',
+    cyan:   '#00B4D8',
+    green:  '#00FF94',
     purple: '#7B2FFF',
     orange: '#FFB800',
   };

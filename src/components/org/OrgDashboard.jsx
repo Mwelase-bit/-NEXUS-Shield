@@ -11,7 +11,7 @@ import {
   CartesianGrid,
   Cell,
 } from 'recharts';
-import { Play, FileText, Users, AlertOctagon, Scale, ShieldAlert, CheckCircle2, RotateCw, RefreshCw } from 'lucide-react';
+import { Play, FileText, Users, AlertOctagon, Scale, ShieldAlert, CheckCircle2, RotateCw, RefreshCw, Anchor } from 'lucide-react';
 import { generatePhishingSim, analyzeOrgRisk } from '../../services/claude';
 import { useGame } from '../../context/GameContext';
 
@@ -38,6 +38,10 @@ export default function OrgDashboard() {
   const [activeDrill, setActiveDrill] = useState(null); // { type, phase, logs }
   const [drillLogs, setDrillLogs] = useState([]);
   const [drillPhase, setDrillPhase] = useState(0); // 0 = idle, 1 = ingest, 2 = exploit, 3 = containment, 4 = complete
+
+  // RBAC crane command demo state
+  const [craneResult, setCraneResult] = useState(null);
+  const [craneLoading, setCraneLoading] = useState(false);
 
   // AI Defensive Retraining Model State
   const [recalibrating, setRecalibrating] = useState(false);
@@ -93,12 +97,12 @@ export default function OrgDashboard() {
       } else {
         // Fallback or mock data for other simulations
         simDetails = {
-          email_subject: `[SIMULATION NOTICE] Internal ${drillType} Initiated`,
-          email_body: `This is a test notification for the internal ${drillType} simulated exercise. Core target: ${targetDept} networks.`,
-          sender_name: 'NEXUS Simulation Core',
-          sender_email: 'sec-ops@nexus.org',
-          fake_link_text: 'Review Target Parameters',
-          red_flags_present: ['Authorised mandate hash active', 'Mock cyber drill container'],
+          email_subject: `[PORT-NEXUS DRILL] ${drillType} — ${targetDept === 'all' ? 'Entire Terminal' : targetDept}`,
+          email_body: `This is an authorised PORT-NEXUS simulation exercise targeting ${targetDept === 'all' ? 'entire terminal' : targetDept} systems. Drill type: ${drillType}.`,
+          sender_name: 'PORT-NEXUS Simulation Core',
+          sender_email: 'sec-ops@port-nexus.dct',
+          fake_link_text: 'Review Terminal Drill Parameters',
+          red_flags_present: ['Authorised mandate hash active', 'Sandboxed port drill container — no real systems affected'],
         };
       }
 
@@ -110,7 +114,7 @@ export default function OrgDashboard() {
       // Launch simulated Phase progress board
       setActiveDrill({ type: drillType, details: simDetails });
       setDrillPhase(1);
-      setDrillLogs(['[INGEST] Connecting API event stream to Apache Kafka... OK', '[INGEST] Validating Pydantic schema schemas... VALIDATED']);
+      setDrillLogs(['[INGEST] Connecting PORT-NEXUS event stream to terminal telemetry broker... OK', '[INGEST] Validating port schema — TOS, SCADA, Gate, Manifest nodes: VALIDATED']);
     } finally {
       setLoading(false);
       dispatch({ type: 'AI_LOADING', loading: false });
@@ -123,20 +127,20 @@ export default function OrgDashboard() {
 
     const phaseLogs = {
       1: [
-        '[INGEST] Listening to telemetry node streams...',
-        '[SENSE] GNN loading topological baseline map...',
-        '[SENSE] Baseline check: NOMINAL'
+        '[INGEST] Connecting to port telemetry node streams (TOS, SCADA, Gate)...',
+        '[SENSE] GNN loading maritime topology baseline — berths, cranes, manifest nodes...',
+        '[SENSE] Port baseline check: NOMINAL — 312 staff entities, 6 zone nodes mapped'
       ],
       2: [
-        `[ATTACK] Injecting simulated ${activeDrill.type} vectors into sandbox environment...`,
-        `[ATTACK] Attacker performing credential brute-force attempts T1110...`,
-        `[ATTACK] Attack mapping against MITRE ATT&CK kill-chain: DETECTED`
+        `[ATTACK] Injecting simulated ${activeDrill.type} vectors into port sandbox environment...`,
+        `[ATTACK] Attacker pivoting: TOS-SERVER-01 → SCADA VLAN → QC-04 Crane PLC (T1021 lateral)`,
+        `[ATTACK] Kill-chain mapped against MITRE ATT&CK ICS: T1566 → T1059 → T1486 DETECTED`
       ],
       3: [
-        `[CONTAINMENT] GNN route forecast confidence threshold exceeded.`,
-        `[SHIELD] Triggering autonomous threat isolation (Redis socket block)... SUCCESS`,
-        `[SHIELD] Content audit log committed to immutable PostgreSQL audit table: OK`,
-        `[SHIELD] Mean Time to Detect (MTTD): 1.8 seconds. Mean Time to Respond (MTTR): 2.4 seconds.`
+        `[CONTAINMENT] GNN route confidence threshold exceeded — Transnet pattern signature matched.`,
+        `[SHIELD] Triggering autonomous SCADA segment isolation (Redis socket block)... SUCCESS`,
+        `[SHIELD] Manifest DB audit log committed to immutable audit table — integrity preserved: OK`,
+        `[SHIELD] MTTD: 1.8 s — MTTR: 2.4 s — IMO MSC-FAL.1/Circ.3 response SLA met.`
       ]
     };
 
@@ -165,20 +169,39 @@ export default function OrgDashboard() {
     }, 3000);
   };
 
+  const handleCraneCommand = async (role) => {
+    setCraneLoading(true);
+    setCraneResult(null);
+    try {
+      const res = await fetch('/api/crane-command', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-role': role },
+        body: '{}',
+      });
+      const data = await res.json();
+      setCraneResult({ status: res.status, ...data });
+    } catch {
+      setCraneResult({ status: 500, error: 'Network error' });
+    } finally {
+      setCraneLoading(false);
+    }
+  };
+
   const filteredEmployees = deptFilter
     ? org.employees.filter((e) => e.department === deptFilter)
     : org.employees;
 
   const exportPdf = () => {
     const html = `
-      <html><head><title>NEXUS Compliance Report</title>
+      <html><head><title>PORT-NEXUS Compliance Report</title>
       <style>body{font-family:monospace;padding:40px;background:#030712;color:#E5E7EB;}h1{color:#38BDF8;border-bottom:1px solid #1E293B;padding-bottom:10px;}table{width:100%;border-collapse:collapse;margin:20px 0;}th,td{border:1px solid #334155;padding:12px;text-align:left;}th{background:#0F172A;color:#38BDF8;}</style></head>
-      <body><h1>NEXUS Cyber Resilience Compliance Report</h1>
-      <p>Organisation: ${org.company}</p>
-      <p>Data Residency Verification: South African Jurisdiction (Active)</p>
-      <p>Overall Corporate Risk Score: ${org.stats.riskScore}%</p>
+      <body><h1>PORT-NEXUS Maritime Cyber Resilience Report</h1>
+      <p>Port Authority: ${org.company}</p>
+      <p>Data Residency Verification: South African Jurisdiction (Active) — POPIA Compliant</p>
+      <p>IMO Cyber Risk Management Compliance: MSC-FAL.1/Circ.3 (Active)</p>
+      <p>Overall Terminal Risk Score: ${org.stats.riskScore}%</p>
       <p>Completed Security Drills: ${org.stats.simulationsRun} | Average pass rate: ${org.stats.passRate}%</p>
-      <h2>Employee Risk & Training Matrix</h2>
+      <h2>Port Staff Risk & Training Matrix</h2>
       <table><thead><tr><th>Name</th><th>Department</th><th>Simulation Outcome</th><th>Training Status</th><th>Risk Rating</th></tr></thead>
       <tbody>${org.employees.map((e) =>
         `<tr><td>${e.name}</td><td>${e.department}</td><td>${e.result}</td><td>${e.training}</td><td>${e.risk}%</td></tr>`
@@ -195,7 +218,7 @@ export default function OrgDashboard() {
     <div className="org-dashboard">
       <header className="org-header">
         <div>
-          <h1>NEXUS — Corporate Resilience Command</h1>
+          <h1>PORT-NEXUS — Port Authority Command</h1>
           <span className="co-tag">{org.company}</span>
         </div>
         <div className="org-header-actions">
@@ -216,7 +239,7 @@ export default function OrgDashboard() {
       <div className="org-grid">
         {/* Risk Gauge Card */}
         <section className="org-card gauge-card">
-          <h3>Corporate Risk Index</h3>
+          <h3>Terminal Risk Index</h3>
           <div className="risk-gauge" style={{ '--risk-color': riskColor }}>
             <svg viewBox="0 0 120 120">
               <circle cx="60" cy="60" r="50" fill="none" stroke="#1B3A5C" strokeWidth="10" />
@@ -234,7 +257,7 @@ export default function OrgDashboard() {
             <span className="gauge-value">{org.stats.riskScore}%</span>
           </div>
           <div className="org-stats-row">
-            <div><Users size={16} /><strong>{org.stats.totalEmployees}</strong><small>Employees</small></div>
+            <div><Users size={16} /><strong>{org.stats.totalEmployees}</strong><small>Port Staff</small></div>
             <div><Play size={16} /><strong>{org.stats.simulationsRun}</strong><small>Drills Run</small></div>
             <div><span className="pass">{org.stats.passRate}%</span><small>Pass Rate</small></div>
             <div><span className="fail">{org.stats.failRate}%</span><small>Fail Rate</small></div>
@@ -257,7 +280,7 @@ export default function OrgDashboard() {
 
         {/* Department Card */}
         <section className="org-card wide">
-          <h3>Department Risk Exposure (Click to filter employee records)</h3>
+          <h3>Terminal Department Risk Exposure (Click to filter staff records)</h3>
           <ResponsiveContainer width="100%" height={180}>
             <BarChart data={org.stats.departments}>
               <CartesianGrid stroke="rgba(255, 255, 255, 0.04)" />
@@ -275,24 +298,24 @@ export default function OrgDashboard() {
 
         {/* Simulation Control Card */}
         <section className="org-card">
-          <h3>Launch Security Simulation Drill</h3>
-          
+          <h3>Launch Port Security Simulation Drill</h3>
+
           <div className="form-group">
             <label>Drill / Attack Vector Selection</label>
             <select value={drillType} onChange={(e) => setDrillType(e.target.value)}>
-              {['Phishing Campaign', 'Ransomware Drill', 'Penetration Test', 'Vulnerability Assessment', 'Threat Hunt'].map((t) => (
+              {['Phishing Campaign', 'SCADA Intrusion Drill', 'Ransomware Containment', 'Manifest Tampering Sim', 'Threat Hunt'].map((t) => (
                 <option key={t}>{t}</option>
               ))}
             </select>
           </div>
 
           <div className="form-group">
-            <label>Target Infrastructure Scope</label>
+            <label>Target Operational Scope</label>
             <select value={targetDept} onChange={(e) => setTargetDept(e.target.value)}>
-              <option value="all">Entire Enterprise</option>
-              <option value="Finance">Finance Department</option>
-              <option value="Executive">Executive Operations</option>
-              <option value="Sales">Sales Systems</option>
+              <option value="all">Entire Terminal</option>
+              <option value="Customs">Customs & Documentation</option>
+              <option value="Port Admin">Port Administration</option>
+              <option value="Crane Ops">Crane Operations</option>
             </select>
           </div>
 
@@ -392,15 +415,15 @@ export default function OrgDashboard() {
             <p className="muted">Fetching strategic risk outlook...</p>
           )}
           <button type="button" className="nexus-btn ghost full-width m-t-15" onClick={exportPdf}>
-            <FileText size={16} /> Export POPIA Compliance Audit PDF
+            <FileText size={16} /> Export IMO / POPIA Compliance Audit PDF
           </button>
         </section>
 
         {/* Employee Records Card */}
         <section className="org-card wide">
-          <h3>Employee Risk Exposure Table {deptFilter && `— ${deptFilter}`}</h3>
+          <h3>Port Staff Risk Exposure Table {deptFilter && `— ${deptFilter}`}</h3>
           <div className="table-header-filter">
-            <small>Showing record database in compliance with South African data subject rights.</small>
+            <small>Showing records in compliance with South African POPIA data subject rights.</small>
             {deptFilter && <button onClick={() => setDeptFilter(null)}>Clear filter</button>}
           </div>
           <table className="emp-table">
@@ -434,6 +457,37 @@ export default function OrgDashboard() {
         </section>
       </div>
 
+      {/* RBAC Crane Command Demo — Separation of Duties enforced server-side */}
+      <div className="org-grid" style={{ marginTop: 0, paddingTop: 0 }}>
+        <section className="org-card wide">
+          <h3><Anchor size={16} style={{ display: 'inline', marginRight: 8 }} />RBAC Demo — Emergency Crane Halt (Server-Side Separation of Duties)</h3>
+          <p className="muted" style={{ marginBottom: 12 }}>
+            Issuing an emergency crane halt is a privileged action. The proxy enforces RBAC — only <strong>Security Analyst</strong> and <strong>Port Administrator</strong> roles are authorised. Test both outcomes below.
+          </p>
+          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginBottom: 12 }}>
+            <button type="button" className="nexus-btn primary" onClick={() => handleCraneCommand('Security Analyst')} disabled={craneLoading}>
+              Issue Halt as Security Analyst (should succeed)
+            </button>
+            <button type="button" className="nexus-btn ghost" onClick={() => handleCraneCommand('Crane Operator')} disabled={craneLoading}>
+              Issue Halt as Crane Operator (should be denied)
+            </button>
+            <button type="button" className="nexus-btn ghost" onClick={() => handleCraneCommand('Port Administrator')} disabled={craneLoading}>
+              Issue Halt as Port Administrator (should succeed)
+            </button>
+          </div>
+          {craneLoading && <p className="muted">Sending to proxy...</p>}
+          {craneResult && (
+            <div className={`security-alert ${craneResult.status === 200 ? 'pass' : 'fail'}`} style={{ marginTop: 8 }}>
+              <strong>HTTP {craneResult.status}</strong>
+              {craneResult.status === 200
+                ? <span> — {craneResult.status}: CRANE HALT ISSUED ✓ (operator: {craneResult.operator})</span>
+                : <span> — {craneResult.error}: {craneResult.detail}</span>
+              }
+            </div>
+          )}
+        </section>
+      </div>
+
       {/* Campaign Authorisation Gate Modal (POPIA & Cybercrimes Mandate Check) */}
       {showLegalGate && (
         <div className="legal-gate-modal-backdrop">
@@ -443,7 +497,7 @@ export default function OrgDashboard() {
               <h3>POPIA & Cybercrimes Act Mandate Gate</h3>
             </div>
             <p className="modal-instruction">
-              Under South African law (Cybercrimes Act 19 of 2020), written authorization must be verified and cataloged before initiating cybersecurity diagnostics or simulated phishing.
+              Under South African law (Cybercrimes Act 19 of 2020) and IMO MSC-FAL.1/Circ.3, written authorisation must be verified before initiating cybersecurity diagnostics or simulated maritime phishing.
             </p>
 
             {gateError && (

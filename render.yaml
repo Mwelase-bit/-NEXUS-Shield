@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: nexus-shield
+    runtime: node
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_VERSION
+        value: 20.11.0
+      - key: PORT
+        value: 3001
+      - key: ANTHROPIC_API_KEY
+        sync: false
+        placeholder: "Enter your Anthropic (Claude) API key"

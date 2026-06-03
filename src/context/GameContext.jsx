@@ -36,7 +36,7 @@ const initialState = {
   debrief: null,
   aiLoading: false,
   org: {
-    company: 'Sandton Financial Group',
+    company: 'Durban Container Terminal',
     stats: { ...SEED_ORG_STATS },
     employees: [...SEED_ORG_EMPLOYEES],
     simulations: [],

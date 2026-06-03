@@ -5,15 +5,16 @@ import * as THREE from 'three';
 import { useGame } from '../../context/GameContext';
 import { DISTRICTS } from './cityConfig';
 
+// Port attack chain — mirrors Transnet 2021 lateral movement pattern
 const PATHS = [
-  { from: 'GATE', to: 'CORE', label: 'T1566 ➔ T1059 (Initial ➔ Exec)', baseProb: 88 },
-  { from: 'CORE', to: 'VAULT', label: 'T1021 ➔ T1486 (Lateral ➔ Ransom)', baseProb: 76 },
-  { from: 'CORE', to: 'CLOUD', label: 'T1078 ➔ T1526 (Cloud Credential)', baseProb: 65 },
-  { from: 'CLOUD', to: 'OUTPOST', label: 'T1021 ➔ T1048 (Egress Path)', baseProb: 45 },
-  { from: 'BRIDGE', to: 'CORE', label: 'T1199 ➔ T1021 (Trusted Access)', baseProb: 72 },
-  { from: 'CORE', to: 'OUTPOST', label: 'T1021 ➔ T1110 (Brute Force)', baseProb: 55 },
-  { from: 'GATE', to: 'BRIDGE', label: 'T1566 ➔ T1199 (Gateway Hop)', baseProb: 38 },
-  { from: 'VAULT', to: 'OUTPOST', label: 'T1048 ➔ T1021 (Vault Egress)', baseProb: 58 },
+  { from: 'GATE',    to: 'CORE',    label: 'T1566 ➔ T1059 (Phishing ➔ TOS Exec)',         baseProb: 88 },
+  { from: 'CORE',    to: 'VAULT',   label: 'T1021 ➔ T1565 (TOS ➔ Manifest Tamper)',        baseProb: 76 },
+  { from: 'CORE',    to: 'OUTPOST', label: 'T1021 ➔ T1059 (TOS ➔ Crane SCADA Pivot)',      baseProb: 65 },
+  { from: 'OUTPOST', to: 'VAULT',   label: 'T1486 ➔ T1048 (Crane Ransom ➔ Exfil)',         baseProb: 58 },
+  { from: 'BRIDGE',  to: 'CORE',    label: 'T1199 ➔ T1021 (Comms Supply Chain ➔ TOS)',     baseProb: 72 },
+  { from: 'CORE',    to: 'CLOUD',   label: 'T1078 ➔ T1526 (Cloud Credential Abuse)',        baseProb: 55 },
+  { from: 'CLOUD',   to: 'OUTPOST', label: 'T1021 ➔ T1048 (Cloud ➔ Crane Egress)',         baseProb: 45 },
+  { from: 'GATE',    to: 'BRIDGE',  label: 'T1566 ➔ T1199 (Gate Phish ➔ Comms Hop)',       baseProb: 38 },
 ];
 
 function ThreatVector({ fromPos, toPos, probability, label, isActive }) {
