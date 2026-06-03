@@ -100,7 +100,7 @@ function SystemNarratorConsole() {
 export default function OrgDashboard() {
   const { state, dispatch } = useGame();
   const { org } = state;
-  const [activeTab, setActiveTab] = useState('Analyze'); // 'Analyze' | 'Predict' | 'Act'
+  const [activeTab, setActiveTab] = useState('Detecting'); // 'Detecting' | 'Narrating' | 'Predicting' | 'Responding'
   const [drillType, setDrillType] = useState('Phishing Campaign');
   const [targetDept, setTargetDept] = useState('all');
   const [loading, setLoading] = useState(false);
@@ -323,28 +323,35 @@ export default function OrgDashboard() {
       <div className="org-tabs">
         <button
           type="button"
-          className={`org-tab-btn ${activeTab === 'Analyze' ? 'active' : ''}`}
-          onClick={() => setActiveTab('Analyze')}
+          className={`org-tab-btn ${activeTab === 'Detecting' ? 'active' : ''}`}
+          onClick={() => setActiveTab('Detecting')}
         >
-          ANALYZE
+          DETECTING
         </button>
         <button
           type="button"
-          className={`org-tab-btn ${activeTab === 'Predict' ? 'active' : ''}`}
-          onClick={() => setActiveTab('Predict')}
+          className={`org-tab-btn ${activeTab === 'Narrating' ? 'active' : ''}`}
+          onClick={() => setActiveTab('Narrating')}
         >
-          PREDICT
+          NARRATING
         </button>
         <button
           type="button"
-          className={`org-tab-btn ${activeTab === 'Act' ? 'active' : ''}`}
-          onClick={() => setActiveTab('Act')}
+          className={`org-tab-btn ${activeTab === 'Predicting' ? 'active' : ''}`}
+          onClick={() => setActiveTab('Predicting')}
         >
-          ACT
+          PREDICTING
+        </button>
+        <button
+          type="button"
+          className={`org-tab-btn ${activeTab === 'Responding' ? 'active' : ''}`}
+          onClick={() => setActiveTab('Responding')}
+        >
+          RESPONDING
         </button>
       </div>
 
-      {activeTab === 'Analyze' && (
+      {activeTab === 'Detecting' && (
         <div className="org-grid">
           {/* Risk Gauge Card */}
           <section className="org-card gauge-card">
@@ -373,23 +380,16 @@ export default function OrgDashboard() {
             </div>
           </section>
 
-          {/* Risk History Timeline */}
+          {/* Anomaly Live Alerts Feed */}
           <section className="org-card">
-            <h3>Risk History Timeline</h3>
-            <ResponsiveContainer width="100%" height={180}>
-              <LineChart data={org.stats.riskTrend}>
-                <CartesianGrid stroke="rgba(255, 255, 255, 0.04)" />
-                <XAxis dataKey="month" tick={{ fill: '#64748B' }} />
-                <YAxis tick={{ fill: '#64748B' }} />
-                <Tooltip />
-                <Line type="monotone" dataKey="risk" stroke="#38BDF8" strokeWidth={2} />
-              </LineChart>
-            </ResponsiveContainer>
-          </section>
-
-          {/* Live ACCIS Anomaly Ticker */}
-          <section className="org-card wide">
-            <SystemNarratorConsole />
+            <h3>System Anomaly Live Alerts</h3>
+            <div className="drill-console" style={{ height: '180px' }}>
+              <p className="console-line" style={{ color: '#00FFE5' }}>[DETECT] 07:36:01 - Anomaly score spike on TOS-SERVER-01: 94.2%</p>
+              <p className="console-line" style={{ color: '#FFB800' }}>[WARN] 07:36:12 - Suspicious LDAP queries from Outpost Crane sub-controller</p>
+              <p className="console-line" style={{ color: '#FF2A54' }}>[CRIT] 07:36:25 - Multiple failed SSH attempts on Gate Access Control readers</p>
+              <p className="console-line" style={{ color: '#64748B' }}>[INFO] 07:36:34 - Automatic baseline calibration check: Nominal</p>
+              <p className="console-line" style={{ color: '#00FFE5' }}>[DETECT] 07:36:45 - Large volume outbound queries on manifest database (4.2GB)</p>
+            </div>
           </section>
 
           {/* Department Card */}
@@ -449,7 +449,54 @@ export default function OrgDashboard() {
         </div>
       )}
 
-      {activeTab === 'Predict' && (
+      {activeTab === 'Narrating' && (
+        <div className="org-grid">
+          {/* AI Strategic Risk Report Card */}
+          <section className="org-card">
+            <h3>AI Strategic Compliance & Risk Outlook</h3>
+            {org.riskAnalysis ? (
+              <div className="risk-analysis-text">
+                <p className="risk-level-tag">Risk Outlook: {org.riskAnalysis.overall_risk_level}</p>
+                <ul className="bullet-insights">
+                  {org.riskAnalysis.key_findings?.map((f, i) => <li key={i}>{f}</li>)}
+                </ul>
+                <h4>Priority Actions</h4>
+                <ul className="bullet-insights">
+                  {org.riskAnalysis.priority_recommendations?.map((r, i) => <li key={i}>{r}</li>)}
+                </ul>
+              </div>
+            ) : (
+              <p className="muted">Fetching strategic risk outlook...</p>
+            )}
+          </section>
+
+          {/* Compliance Auditor */}
+          <section className="org-card">
+            <h3>Compliance Auditor & PDF Export</h3>
+            <p className="muted" style={{ fontSize: '0.8rem', lineHeight: '1.5', marginBottom: '1rem' }}>
+              Verify corporate mandates and download an official IMO MSC-FAL.1/Circ.3 compliance audit report.
+            </p>
+            <div className="model-stat-row" style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '0.5rem', marginBottom: '0.5rem' }}>
+              <span>Data Residency</span>
+              <strong className="green-text">South Africa (Active)</strong>
+            </div>
+            <div className="model-stat-row" style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '0.5rem', marginBottom: '0.5rem' }}>
+              <span>POPIA Standards</span>
+              <strong className="green-text">Compliant</strong>
+            </div>
+            <button type="button" className="nexus-btn primary full-width m-t-15" onClick={exportPdf}>
+              <FileText size={16} /> Export IMO / POPIA Compliance Audit PDF
+            </button>
+          </section>
+
+          {/* Live ACCIS Anomaly Ticker */}
+          <section className="org-card wide">
+            <SystemNarratorConsole />
+          </section>
+        </div>
+      )}
+
+      {activeTab === 'Predicting' && (
         <div className="org-grid">
           {/* AI Retraining & Defensive Performance Card */}
           <section className="org-card">
@@ -460,7 +507,7 @@ export default function OrgDashboard() {
                 <strong className="green-text">{modelMetrics.gnnAccuracy}%</strong>
               </div>
               <div className="model-stat-row">
-                <span>GNN Topology statistical drift</span>
+                <span>GNN Topology drift</span>
                 <strong className="cyan-text">{modelMetrics.gnnDrift}</strong>
               </div>
               <div className="model-stat-row">
@@ -479,36 +526,62 @@ export default function OrgDashboard() {
             </button>
           </section>
 
-          {/* AI Strategic Risk Report Card */}
+          {/* Risk History Timeline */}
           <section className="org-card">
-            <h3>AI Compliance & Strategic Insight</h3>
-            {org.riskAnalysis ? (
-              <div className="risk-analysis-text">
-                <p className="risk-level-tag">Risk Outlook: {org.riskAnalysis.overall_risk_level}</p>
-                <ul className="bullet-insights">
-                  {org.riskAnalysis.key_findings?.map((f, i) => <li key={i}>{f}</li>)}
-                </ul>
-                <h4>Priority Actions</h4>
-                <ul className="bullet-insights">
-                  {org.riskAnalysis.priority_recommendations?.map((r, i) => <li key={i}>{r}</li>)}
-                </ul>
-              </div>
-            ) : (
-              <p className="muted">Fetching strategic risk outlook...</p>
-            )}
-            <button type="button" className="nexus-btn ghost full-width m-t-15" onClick={exportPdf}>
-              <FileText size={16} /> Export IMO / POPIA Compliance Audit PDF
-            </button>
+            <h3>Risk History & Forecast Timeline</h3>
+            <ResponsiveContainer width="100%" height={180}>
+              <LineChart data={org.stats.riskTrend}>
+                <CartesianGrid stroke="rgba(255, 255, 255, 0.04)" />
+                <XAxis dataKey="month" tick={{ fill: '#64748B' }} />
+                <YAxis tick={{ fill: '#64748B' }} />
+                <Tooltip />
+                <Line type="monotone" dataKey="risk" stroke="#38BDF8" strokeWidth={2} />
+              </LineChart>
+            </ResponsiveContainer>
           </section>
 
-          {/* System Narrator Console */}
+          {/* Predictive Threat Forecasting Matrix */}
           <section className="org-card wide">
-            <SystemNarratorConsole />
+            <h3>Predictive Threat Forecasting Matrix</h3>
+            <table className="emp-table" style={{ marginTop: '0.5rem' }}>
+              <thead>
+                <tr>
+                  <th>Threat Vector</th>
+                  <th>Target Subsystem</th>
+                  <th>Forecasted Probability</th>
+                  <th>Projected Severity</th>
+                  <th>Impact Scope</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Spear-Phishing Campaign</td>
+                  <td>Customs & Documentation</td>
+                  <td style={{ color: '#FFB800', fontWeight: '700' }}>82% (Critical Drift)</td>
+                  <td style={{ color: '#FFB800' }}>Medium-High</td>
+                  <td>Port Administration & Cargo Clearance</td>
+                </tr>
+                <tr>
+                  <td>Quay Crane Modbus SCADA Hijack</td>
+                  <td>Crane PLC Control Subnet</td>
+                  <td style={{ color: '#EF4444', fontWeight: '700' }}>65% (Transnet 2021 Pattern)</td>
+                  <td style={{ color: '#EF4444' }}>Critical</td>
+                  <td>Crane Operations & Vessel Berthing</td>
+                </tr>
+                <tr>
+                  <td>Credential Stuffing / Gate Readers</td>
+                  <td>Gate Identity Server</td>
+                  <td style={{ color: '#10B981', fontWeight: '700' }}>24% (Low Anomaly)</td>
+                  <td style={{ color: '#10B981' }}>Low-Medium</td>
+                  <td>Physical Gate Access Controls</td>
+                </tr>
+              </tbody>
+            </table>
           </section>
         </div>
       )}
 
-      {activeTab === 'Act' && (
+      {activeTab === 'Responding' && (
         <div className="org-grid">
           {/* Simulation Control Card */}
           <section className="org-card">
@@ -536,6 +609,32 @@ export default function OrgDashboard() {
             <button type="button" className="nexus-btn primary" onClick={handleOpenGate} disabled={loading}>
               <Play size={16} /> Initialise Authorization Check
             </button>
+          </section>
+
+          {/* SCADA Isolation (RBAC Control) */}
+          <section className="org-card">
+            <h3>SCADA Isolation (RBAC Control)</h3>
+            <p className="muted" style={{ marginBottom: 12, fontSize: '0.78rem', lineHeight: '1.4' }}>
+              Only **Security Analyst** or **Port Administrator** roles can trigger halts on SCADA VLANs.
+            </p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              <button type="button" className="nexus-btn sm primary" onClick={() => handleCraneCommand('Security Analyst')} disabled={craneLoading}>
+                Halt as Security Analyst (Succeed)
+              </button>
+              <button type="button" className="nexus-btn sm ghost" onClick={() => handleCraneCommand('Crane Operator')} disabled={craneLoading}>
+                Halt as Crane Operator (Deny)
+              </button>
+              <button type="button" className="nexus-btn sm ghost" onClick={() => handleCraneCommand('Port Administrator')} disabled={craneLoading}>
+                Halt as Port Admin (Succeed)
+              </button>
+            </div>
+            {craneLoading && <p className="muted" style={{ fontSize: '0.7rem', marginTop: '6px' }}>Sending request...</p>}
+            {craneResult && (
+              <div className={`security-alert ${craneResult.status === 200 ? 'pass' : 'fail'}`} style={{ marginTop: 8, padding: '4px 8px', fontSize: '0.75rem' }}>
+                <strong>HTTP {craneResult.status}</strong>
+                {craneResult.status === 200 ? ' - SUCCEEDED' : ' - DENIED'}
+              </div>
+            )}
           </section>
 
           {/* Active Simulation board (Phase indicators) */}
@@ -579,40 +678,6 @@ export default function OrgDashboard() {
               <div className="empty-drill muted">
                 <ShieldAlert size={36} />
                 <p>No drills actively executing. Authorise and launch a simulation to see the phase tracker board.</p>
-              </div>
-            )}
-          </section>
-
-          {/* System Narrator Console */}
-          <section className="org-card wide">
-            <SystemNarratorConsole />
-          </section>
-
-          {/* RBAC Crane Command Demo — Separation of Duties enforced server-side */}
-          <section className="org-card wide">
-            <h3><Anchor size={16} style={{ display: 'inline', marginRight: 8 }} />RBAC Demo — Emergency Crane Halt (Server-Side Separation of Duties)</h3>
-            <p className="muted" style={{ marginBottom: 12 }}>
-              Issuing an emergency crane halt is a privileged action. The proxy enforces RBAC — only <strong>Security Analyst</strong> and <strong>Port Administrator</strong> roles are authorised. Test both outcomes below.
-            </p>
-            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginBottom: 12 }}>
-              <button type="button" className="nexus-btn primary" onClick={() => handleCraneCommand('Security Analyst')} disabled={craneLoading}>
-                Issue Halt as Security Analyst (should succeed)
-              </button>
-              <button type="button" className="nexus-btn ghost" onClick={() => handleCraneCommand('Crane Operator')} disabled={craneLoading}>
-                Issue Halt as Crane Operator (should be denied)
-              </button>
-              <button type="button" className="nexus-btn ghost" onClick={() => handleCraneCommand('Port Administrator')} disabled={craneLoading}>
-                Issue Halt as Port Administrator (should succeed)
-              </button>
-            </div>
-            {craneLoading && <p className="muted">Sending to proxy...</p>}
-            {craneResult && (
-              <div className={`security-alert ${craneResult.status === 200 ? 'pass' : 'fail'}`} style={{ marginTop: 8 }}>
-                <strong>HTTP {craneResult.status}</strong>
-                {craneResult.status === 200
-                  ? <span> — {craneResult.status}: CRANE HALT ISSUED ✓ (operator: {craneResult.operator})</span>
-                  : <span> — {craneResult.error}: {craneResult.detail}</span>
-                }
               </div>
             )}
           </section>
