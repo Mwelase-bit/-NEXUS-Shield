@@ -3,6 +3,7 @@ import { useFrame } from '@react-three/fiber';
 import { Html, Float } from '@react-three/drei';
 import * as THREE from 'three';
 import { DISTRICTS } from './cityConfig';
+import OutlineEdge from './OutlineEdge';
 
 /** Reusable window panel grid on a building face */
 function WindowGrid({ width, height, depth, rows = 4, cols = 3, color = '#FFD966', face = 'front' }) {
@@ -17,7 +18,7 @@ function WindowGrid({ width, height, depth, rows = 4, cols = 3, color = '#FFD966
         <mesh key={`${r}-${c}`} position={pos}>
           <planeGeometry args={[width / (cols + 2.5), height / (rows + 2.5)]} />
           <meshStandardMaterial
-            color={lit ? color : '#050A14'}
+            color={lit ? color : '#2E3B48'}
             emissive={lit ? color : '#000'}
             emissiveIntensity={lit ? 1.4 : 0}
             transparent
@@ -62,14 +63,16 @@ function GateBuilding({ color, accent, selected, hovered }) {
       {/* Base platform */}
       <mesh position={[0, 0.2, 0]} receiveShadow castShadow>
         <boxGeometry args={[5, 0.4, 4]} />
-        <meshStandardMaterial color="#1A2A3A" metalness={0.6} roughness={0.5} />
+        <meshStandardMaterial color="#B7C4D2" metalness={0.1} roughness={0.5} />
+        <OutlineEdge />
       </mesh>
 
       {/* Left pillar */}
       <group position={[-1.6, 0, 0]}>
         <mesh position={[0, 2.0, 0]} castShadow>
           <boxGeometry args={[1.0, 4.0, 1.4]} />
-          <meshStandardMaterial color="#1E3A52" metalness={0.7} roughness={0.4} />
+          <meshStandardMaterial color="#7E97AE" metalness={0.1} roughness={0.4} />
+          <OutlineEdge />
         </mesh>
         <mesh position={[0.52, 2.0, 0]}>
           <boxGeometry args={[0.06, 3.5, 0.06]} />
@@ -81,7 +84,8 @@ function GateBuilding({ color, accent, selected, hovered }) {
       <group position={[1.6, 0, 0]}>
         <mesh position={[0, 2.0, 0]} castShadow>
           <boxGeometry args={[1.0, 4.0, 1.4]} />
-          <meshStandardMaterial color="#1E3A52" metalness={0.7} roughness={0.4} />
+          <meshStandardMaterial color="#7E97AE" metalness={0.1} roughness={0.4} />
+          <OutlineEdge />
         </mesh>
         <mesh position={[-0.52, 2.0, 0]}>
           <boxGeometry args={[0.06, 3.5, 0.06]} />
@@ -92,7 +96,8 @@ function GateBuilding({ color, accent, selected, hovered }) {
       {/* Archway top */}
       <mesh position={[0, 4.3, 0]} castShadow>
         <boxGeometry args={[4.2, 0.7, 1.5]} />
-        <meshStandardMaterial color="#253A50" metalness={0.8} />
+        <meshStandardMaterial color="#93A9BE" metalness={0.1} />
+        <OutlineEdge />
       </mesh>
 
       {/* Laser barrier */}
@@ -139,20 +144,22 @@ function CoreBuilding({ color, accent, selected, hovered }) {
       {/* Base */}
       <mesh position={[0, 0.25, 0]} receiveShadow castShadow>
         <boxGeometry args={[4.5, 0.5, 4]} />
-        <meshStandardMaterial color="#152030" metalness={0.7} />
+        <meshStandardMaterial color="#B0BCC9" metalness={0.1} />
+        <OutlineEdge />
       </mesh>
 
       {/* Main server tower */}
       <mesh position={[0, 3.5, 0]} castShadow>
         <boxGeometry args={[3.0, 7.0, 3.0]} />
-        <meshStandardMaterial color="#0E1E2E" metalness={0.85} roughness={0.2} emissive={color} emissiveIntensity={0.08} />
+        <meshStandardMaterial color="#6B8298" metalness={0.1} roughness={0.6} emissive={color} emissiveIntensity={0.08} />
+        <OutlineEdge />
       </mesh>
 
       {/* Server rack panels on front */}
       {[1.2, 2.0, 2.8, 3.6, 4.4].map((y, i) => (
         <mesh key={i} position={[0, y, 1.52]}>
           <boxGeometry args={[2.5, 0.55, 0.05]} />
-          <meshStandardMaterial color="#0A1520" emissive={i % 2 ? color : accent} emissiveIntensity={0.6} />
+          <meshStandardMaterial color="#3A4956" emissive={i % 2 ? color : accent} emissiveIntensity={0.6} />
         </mesh>
       ))}
 
@@ -164,7 +171,8 @@ function CoreBuilding({ color, accent, selected, hovered }) {
         <group key={i} position={[x, 0, 0]}>
           <mesh position={[0, 2.2, 0]} castShadow>
             <boxGeometry args={[1.0, 4.4, 1.0]} />
-            <meshStandardMaterial color="#0D1822" metalness={0.8} />
+            <meshStandardMaterial color="#75899C" metalness={0.1} />
+            <OutlineEdge />
           </mesh>
           <mesh position={[0, 4.8, 0]}>
             <sphereGeometry args={[0.2, 8, 8]} />
@@ -197,33 +205,36 @@ function VaultBuilding({ color, accent, selected, hovered }) {
       {/* Thick base slab */}
       <mesh position={[0, 0.6, 0]} receiveShadow castShadow>
         <boxGeometry args={[5.5, 1.2, 4.5]} />
-        <meshStandardMaterial color="#1A1508" metalness={0.9} roughness={0.25} />
+        <meshStandardMaterial color="#C0A97E" metalness={0.15} roughness={0.6} />
+        <OutlineEdge />
       </mesh>
 
       {/* Main vault body */}
       <mesh position={[0, 2.4, 0]} castShadow>
         <boxGeometry args={[4.5, 3.6, 3.8]} />
-        <meshStandardMaterial color="#201A06" metalness={0.85} roughness={0.3} emissive={color} emissiveIntensity={0.07} />
+        <meshStandardMaterial color="#CDB183" metalness={0.15} roughness={0.6} emissive={color} emissiveIntensity={0.07} />
+        <OutlineEdge />
       </mesh>
 
       {/* Thick reinforcement strips */}
       {[0.6, 1.6, 2.6, 3.6].map((y, i) => (
         <mesh key={i} position={[0, y + 1, 1.92]} receiveShadow>
           <boxGeometry args={[4.6, 0.18, 0.12]} />
-          <meshStandardMaterial color="#3A2800" metalness={0.95} />
+          <meshStandardMaterial color="#8F7549" metalness={0.3} />
         </mesh>
       ))}
 
       {/* Vault door — circular combination wheel */}
       <mesh position={[0, 2.4, 1.93]} castShadow>
         <cylinderGeometry args={[1.3, 1.3, 0.15, 16]} />
-        <meshStandardMaterial color="#2A1A00" metalness={0.95} roughness={0.1} />
+        <meshStandardMaterial color="#8A6F3E" metalness={0.3} roughness={0.4} />
+        <OutlineEdge thickness={0.035} />
       </mesh>
       {/* Spinning dial */}
       <group position={[0, 2.4, 2.05]} ref={dialRef}>
         <mesh>
           <cylinderGeometry args={[1.1, 1.1, 0.08, 8]} />
-          <meshStandardMaterial color="#3A2400" metalness={1} roughness={0.05} />
+          <meshStandardMaterial color="#A5854C" metalness={0.3} roughness={0.4} />
         </mesh>
         {[0, 1, 2, 3].map((i) => (
           <mesh key={i} position={[Math.cos(i * Math.PI / 2) * 0.75, 0, Math.sin(i * Math.PI / 2) * 0.75]} rotation={[Math.PI / 2, 0, 0]}>
@@ -237,7 +248,8 @@ function VaultBuilding({ color, accent, selected, hovered }) {
       {[[-2.4, -2.0], [2.4, -2.0], [-2.4, 2.0], [2.4, 2.0]].map(([x, z], i) => (
         <mesh key={i} position={[x, 1.8, z]} castShadow>
           <boxGeometry args={[0.7, 3.6, 0.7]} />
-          <meshStandardMaterial color="#1A1206" metalness={0.9} />
+          <meshStandardMaterial color="#B29A6B" metalness={0.15} />
+          <OutlineEdge thickness={0.035} />
         </mesh>
       ))}
 
@@ -269,19 +281,22 @@ function CloudBuilding({ color, accent, selected, hovered }) {
       {/* Cloud-shaped base — stacked cylinders */}
       <mesh position={[0, 0.5, 0]} castShadow>
         <cylinderGeometry args={[3.0, 3.2, 1.0, 32]} />
-        <meshStandardMaterial color="#1A0A2A" metalness={0.5} roughness={0.6} emissive={color} emissiveIntensity={0.1} />
+        <meshStandardMaterial color="#B4A3D6" metalness={0.1} roughness={0.7} emissive={color} emissiveIntensity={0.1} />
+        <OutlineEdge />
       </mesh>
       {[[-1.2, 0, -0.8], [1.2, 0, -0.8], [0, 0, 0.9]].map(([x, y, z], i) => (
         <mesh key={i} position={[x, 1.1, z]} castShadow>
           <sphereGeometry args={[1.1, 16, 12]} />
-          <meshStandardMaterial color="#1F0D35" metalness={0.5} roughness={0.5} emissive={color} emissiveIntensity={0.15} />
+          <meshStandardMaterial color="#C3B4E2" metalness={0.1} roughness={0.7} emissive={color} emissiveIntensity={0.15} />
+          <OutlineEdge />
         </mesh>
       ))}
 
       {/* Server box on top of cloud */}
       <mesh position={[0, 2.4, 0]} castShadow>
         <boxGeometry args={[2.2, 1.5, 2.2]} />
-        <meshStandardMaterial color="#0D0818" metalness={0.8} roughness={0.3} />
+        <meshStandardMaterial color="#6E5FA0" metalness={0.1} roughness={0.6} />
+        <OutlineEdge />
       </mesh>
       <WindowGrid width={2.0} height={1.2} depth={2.2} rows={2} cols={3} color={accent} face="front" />
 
@@ -290,7 +305,7 @@ function CloudBuilding({ color, accent, selected, hovered }) {
         {[0, 1.05, 2.1].map((a, i) => (
           <mesh key={i} position={[Math.cos(a) * 2.0, 0, Math.sin(a) * 2.0]}>
             <boxGeometry args={[0.5, 0.5, 0.5]} />
-            <meshStandardMaterial color="#200A3A" emissive={color} emissiveIntensity={0.8} />
+            <meshStandardMaterial color="#8F7FC0" emissive={color} emissiveIntensity={0.8} />
           </mesh>
         ))}
       </group>
@@ -326,11 +341,13 @@ function OutpostBuilding({ color, accent, selected, hovered }) {
         <group key={i} position={[x, y, z]}>
           <mesh position={[0, 0.5, 0]} castShadow>
             <cylinderGeometry args={[0.85, 0.9, 1.0, 10]} />
-            <meshStandardMaterial color="#0F2015" metalness={0.65} roughness={0.4} />
+            <meshStandardMaterial color="#8FB89A" metalness={0.1} roughness={0.7} />
+            <OutlineEdge thickness={0.035} />
           </mesh>
           <mesh position={[0, 1.15, 0]} castShadow>
             <sphereGeometry args={[0.85, 12, 10]} />
-            <meshStandardMaterial color="#1A3020" emissive={color} emissiveIntensity={0.25} transparent opacity={0.95} />
+            <meshStandardMaterial color="#A9CFB2" emissive={color} emissiveIntensity={0.08} transparent opacity={0.95} />
+            <OutlineEdge thickness={0.035} />
           </mesh>
         </group>
       ))}
@@ -338,7 +355,7 @@ function OutpostBuilding({ color, accent, selected, hovered }) {
       {/* Main antenna spire */}
       <mesh position={[0, 0, 0]} castShadow>
         <cylinderGeometry args={[0.07, 0.14, 4.5, 6]} />
-        <meshStandardMaterial color="#253C30" metalness={0.9} />
+        <meshStandardMaterial color="#7D9486" metalness={0.2} />
       </mesh>
       <group ref={antRef}>
         {[1.0, 1.9, 2.8, 3.7].map((y, i) => (
@@ -352,7 +369,7 @@ function OutpostBuilding({ color, accent, selected, hovered }) {
       {/* Laptop dish / satellite dish */}
       <mesh position={[1.5, 2.2, 0]} rotation={[0.5, 0, 0.3]}>
         <cylinderGeometry args={[0.6, 0.3, 0.1, 12]} />
-        <meshStandardMaterial color="#203A28" emissive={color} emissiveIntensity={0.5} />
+        <meshStandardMaterial color="#8FAE96" emissive={color} emissiveIntensity={0.2} />
       </mesh>
 
       <SelectionRing selected={selected} hovered={hovered} color={color} radius={3.2} />
@@ -377,7 +394,8 @@ function BridgeBuilding({ color, accent, selected, hovered }) {
         <group key={i} position={[x, 0, 0]}>
           <mesh position={[0, 1.8, 0]} castShadow>
             <boxGeometry args={[1.2, 3.6, 1.6]} />
-            <meshStandardMaterial color="#2A1505" metalness={0.85} roughness={0.3} />
+            <meshStandardMaterial color="#C89870" metalness={0.1} roughness={0.6} />
+            <OutlineEdge />
           </mesh>
           <mesh position={[0, 3.7, 0]}>
             <boxGeometry args={[1.3, 0.2, 1.7]} />
@@ -389,7 +407,8 @@ function BridgeBuilding({ color, accent, selected, hovered }) {
       {/* Bridge deck */}
       <mesh position={[0, 1.8, 0]} castShadow>
         <boxGeometry args={[6.6, 0.3, 1.4]} />
-        <meshStandardMaterial color="#1A0E04" metalness={0.8} />
+        <meshStandardMaterial color="#9A7A5C" metalness={0.1} />
+        <OutlineEdge thickness={0.035} />
       </mesh>
 
       {/* Connector cables */}

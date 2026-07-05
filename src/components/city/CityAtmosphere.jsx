@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Sparkles, Stars } from '@react-three/drei';
 import * as THREE from 'three';
+import OutlineEdge from './OutlineEdge';
 
 /** Sky background plane — deep blue-purple gradient */
 export function CityAtmosphere() {
@@ -98,57 +99,48 @@ export function StreetLamps() {
     [-6, 0, -6], [6, 0, -6], [-6, 0, 6], [6, 0, 6],
     [0, 0, -9], [0, 0, 9], [-4, 0, -4], [4, 0, 4],
   ];
-  const colors = ['#00B4D8', '#7B2FFF', '#00FF94', '#00B4D8', '#FFB800', '#00B4D8', '#7B2FFF', '#00FF94'];
-
   return (
     <group>
       {lampPositions.map((p, i) => (
         <group key={i} position={p}>
           <mesh position={[0, 1.5, 0]} castShadow>
             <cylinderGeometry args={[0.04, 0.07, 3.0, 6]} />
-            <meshStandardMaterial color="#1A2A3A" metalness={0.9} />
+            <meshStandardMaterial color="#8E99A4" metalness={0.4} roughness={0.5} />
           </mesh>
           <mesh position={[0.15, 2.9, 0]} rotation={[0, 0, -Math.PI / 6]}>
             <cylinderGeometry args={[0.03, 0.04, 0.55, 6]} />
-            <meshStandardMaterial color="#1A2A3A" metalness={0.9} />
+            <meshStandardMaterial color="#8E99A4" metalness={0.4} roughness={0.5} />
           </mesh>
+          {/* Lamp head — off during the day, just a white globe */}
           <mesh position={[0.28, 3.0, 0]}>
             <sphereGeometry args={[0.13, 10, 10]} />
-            <meshStandardMaterial color={colors[i]} emissive={colors[i]} emissiveIntensity={3} />
+            <meshStandardMaterial color="#F2F5F8" emissive="#FFFFFF" emissiveIntensity={0.15} />
           </mesh>
-          <pointLight position={[0.28, 3.0, 0]} color={colors[i]} intensity={0.8} distance={9} castShadow={false} />
         </group>
       ))}
     </group>
   );
 }
 
-/** Isometric "cyber trees" — stylised low-poly trees */
+/** Stylised low-poly park trees — flat greens, brown trunks (daytime) */
 export function CyberTrees() {
   const positions = [
     [-16, 0, -5], [16, 0, -3], [-15, 0, 9], [16, 0, 12],
     [-4, 0, -13], [7, 0, 14], [-3, 0, 6], [4, 0, -6],
   ];
+  const canopyColors = ['#5FA84E', '#74BC5E', '#4C9444'];
   return (
     <group>
       {positions.map((p, i) => (
         <group key={i} position={p}>
           <mesh position={[0, 0.55, 0]} castShadow>
             <cylinderGeometry args={[0.07, 0.13, 1.1, 6]} />
-            <meshStandardMaterial color="#112233" />
+            <meshStandardMaterial color="#8A6A4A" roughness={0.9} />
           </mesh>
-          <mesh position={[0, 1.5, 0]}>
+          <mesh position={[0, 1.5, 0]} castShadow>
             <dodecahedronGeometry args={[0.62, 0]} />
-            <meshStandardMaterial
-              color={i % 3 === 0 ? '#0D3A20' : i % 3 === 1 ? '#0A2A3A' : '#1A0A30'}
-              emissive={i % 3 === 0 ? '#00FF94' : i % 3 === 1 ? '#00B4D8' : '#7B2FFF'}
-              emissiveIntensity={0.3}
-              transparent opacity={0.92}
-            />
-          </mesh>
-          <mesh position={[0, 1.5, 0]}>
-            <octahedronGeometry args={[0.18, 0]} />
-            <meshStandardMaterial color={i % 2 === 0 ? '#00FFE5' : '#B388FF'} emissive={i % 2 === 0 ? '#00FFE5' : '#B388FF'} emissiveIntensity={1.2} />
+            <meshStandardMaterial color={canopyColors[i % 3]} roughness={0.85} />
+            <OutlineEdge thickness={0.03} />
           </mesh>
         </group>
       ))}

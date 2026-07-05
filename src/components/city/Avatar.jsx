@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Html, Sparkles } from '@react-three/drei';
 import * as THREE from 'three';
+import OutlineEdge from './OutlineEdge';
 
 /**
  * Humanoid avatar — low-poly but clearly human.
@@ -27,8 +28,8 @@ export default function Avatar({
   const breathRef = useRef(0);
 
   const rankId = rank?.id ?? 1;
-  const suitDark = '#1A2C3E';
-  const suitMid = '#243444';
+  const suitDark = '#2E3B4A';
+  const suitMid = '#EDF1F5';
   const skinColor = '#E8C49A';
   const hairColor = '#1A0A00';
 
@@ -82,6 +83,7 @@ export default function Avatar({
         <mesh position={[0, -0.19, 0]} {...sc}>
           <boxGeometry args={[0.14, 0.42, 0.15]} />
           <meshStandardMaterial color={suitDark} metalness={0.2} roughness={0.7} />
+          <OutlineEdge thickness={0.018} />
         </mesh>
         {/* Boot */}
         <mesh position={[0, -0.46, 0.03]} {...sc}>
@@ -94,6 +96,7 @@ export default function Avatar({
         <mesh position={[0, -0.19, 0]} {...sc}>
           <boxGeometry args={[0.14, 0.42, 0.15]} />
           <meshStandardMaterial color={suitDark} metalness={0.2} roughness={0.7} />
+          <OutlineEdge thickness={0.018} />
         </mesh>
         <mesh position={[0, -0.46, 0.03]} {...sc}>
           <boxGeometry args={[0.16, 0.09, 0.21]} />
@@ -108,6 +111,7 @@ export default function Avatar({
         <mesh {...sc}>
           <boxGeometry args={[0.44, 0.58, 0.29]} />
           <meshStandardMaterial color={suitMid} metalness={0.3} roughness={0.65} emissive={auraColor} emissiveIntensity={0.07} />
+          <OutlineEdge thickness={0.018} />
         </mesh>
 
         {/* Chest screen/device */}
@@ -129,6 +133,7 @@ export default function Avatar({
           <mesh position={[0, -0.19, 0]} {...sc}>
             <boxGeometry args={[0.12, 0.4, 0.14]} />
             <meshStandardMaterial color={suitDark} metalness={0.2} roughness={0.7} />
+            <OutlineEdge thickness={0.018} />
           </mesh>
           {/* Wrist device */}
           <mesh position={[-0.01, -0.38, 0.05]}>
@@ -142,6 +147,7 @@ export default function Avatar({
           <mesh position={[0, -0.19, 0]} {...sc}>
             <boxGeometry args={[0.12, 0.4, 0.14]} />
             <meshStandardMaterial color={suitDark} metalness={0.2} roughness={0.7} />
+            <OutlineEdge thickness={0.018} />
           </mesh>
         </group>
 
@@ -151,6 +157,7 @@ export default function Avatar({
           <mesh {...sc}>
             <boxGeometry args={[0.31, 0.33, 0.29]} />
             <meshStandardMaterial color={skinColor} roughness={0.6} />
+            <OutlineEdge thickness={0.018} />
           </mesh>
           {/* Hair / cap top */}
           <mesh position={[0, 0.18, -0.02]}>

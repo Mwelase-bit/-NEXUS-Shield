@@ -3,6 +3,7 @@ import { useFrame } from '@react-three/fiber';
 import { Html, Sparkles } from '@react-three/drei';
 import * as THREE from 'three';
 import { NPCS, MISSIONS, NPC_INTERACT_RADIUS } from './cityConfig';
+import OutlineEdge from './OutlineEdge';
 
 /** Single humanoid NPC character */
 function NPCCharacter({ npc, playerPos, onInteract, isComplete }) {
@@ -60,16 +61,19 @@ function NPCCharacter({ npc, playerPos, onInteract, isComplete }) {
       <mesh position={[-0.1, 0.25, 0]} castShadow>
         <boxGeometry args={[0.12, 0.52, 0.13]} />
         <meshStandardMaterial color={clothingColor} roughness={0.7} />
+        <OutlineEdge thickness={0.018} />
       </mesh>
       <mesh position={[0.1, 0.25, 0]} castShadow>
         <boxGeometry args={[0.12, 0.52, 0.13]} />
         <meshStandardMaterial color={clothingColor} roughness={0.7} />
+        <OutlineEdge thickness={0.018} />
       </mesh>
 
       {/* Torso */}
       <mesh position={[0, 0.78, 0]} castShadow>
         <boxGeometry args={[0.38, 0.5, 0.24]} />
         <meshStandardMaterial color={outfit === 'labcoat' ? '#E8F0F8' : clothingColor} roughness={0.65} />
+        <OutlineEdge thickness={0.018} />
       </mesh>
 
       {/* Role accessory on chest */}
@@ -83,6 +87,7 @@ function NPCCharacter({ npc, playerPos, onInteract, isComplete }) {
         <mesh position={[0, -0.18, 0]} castShadow>
           <boxGeometry args={[0.11, 0.38, 0.13]} />
           <meshStandardMaterial color={outfit === 'labcoat' ? '#E8F0F8' : clothingColor} roughness={0.7} />
+          <OutlineEdge thickness={0.018} />
         </mesh>
       </group>
 
@@ -90,12 +95,14 @@ function NPCCharacter({ npc, playerPos, onInteract, isComplete }) {
       <mesh position={[-0.26, 0.67, 0]} castShadow>
         <boxGeometry args={[0.11, 0.38, 0.13]} />
         <meshStandardMaterial color={outfit === 'labcoat' ? '#E8F0F8' : clothingColor} roughness={0.7} />
+        <OutlineEdge thickness={0.018} />
       </mesh>
 
       {/* Head */}
       <mesh position={[0, 1.22, 0]} castShadow>
         <boxGeometry args={[0.27, 0.29, 0.25]} />
         <meshStandardMaterial color={skinTone} roughness={0.55} />
+        <OutlineEdge thickness={0.018} />
       </mesh>
 
       {/* Hair */}

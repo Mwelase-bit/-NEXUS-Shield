@@ -10,7 +10,7 @@ export const DISTRICTS = {
     color: '#00B4D8',
     accent: '#00FFE5',
     groundColor: '#0D2A3A',
-    tileColor: '#0A2030',
+    tileColor: '#7DBE6E',
   },
   CORE: {
     id: 'CORE',
@@ -21,7 +21,7 @@ export const DISTRICTS = {
     color: '#00FFE5',
     accent: '#7FFFEA',
     groundColor: '#0D2A2A',
-    tileColor: '#0A2020',
+    tileColor: '#85C476',
   },
   VAULT: {
     id: 'VAULT',
@@ -32,7 +32,7 @@ export const DISTRICTS = {
     color: '#FFB800',
     accent: '#FFD966',
     groundColor: '#2A200A',
-    tileColor: '#201800',
+    tileColor: '#93C46E',
   },
   CLOUD: {
     id: 'CLOUD',
@@ -43,7 +43,7 @@ export const DISTRICTS = {
     color: '#7B2FFF',
     accent: '#B388FF',
     groundColor: '#1A0A2A',
-    tileColor: '#120820',
+    tileColor: '#79BA78',
   },
   OUTPOST: {
     id: 'OUTPOST',
@@ -54,7 +54,7 @@ export const DISTRICTS = {
     color: '#00FF94',
     accent: '#80FFCA',
     groundColor: '#0A2A15',
-    tileColor: '#082010',
+    tileColor: '#7FC470',
   },
   BRIDGE: {
     id: 'BRIDGE',
@@ -65,7 +65,7 @@ export const DISTRICTS = {
     color: '#FF6B35',
     accent: '#FFB39B',
     groundColor: '#2A1508',
-    tileColor: '#201005',
+    tileColor: '#8AC072',
   },
 };
 

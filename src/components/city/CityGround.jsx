@@ -2,40 +2,61 @@ import { useMemo } from 'react';
 import * as THREE from 'three';
 import { DISTRICTS, ROAD_PATHS } from './cityConfig';
 
-/** Isometric-style textured tile grid */
+/**
+ * "Game board" ground texture — one non-repeating map across the whole plane:
+ * radial navy gradient (lit center → dark edge) so the play area reads as a
+ * polished board, with a two-level tile grid (fine lines + brighter majors).
+ */
 function useIsometricGroundTexture() {
   return useMemo(() => {
-    const size = 512;
+    const size = 1024;
     const canvas = document.createElement('canvas');
     canvas.width = size;
     canvas.height = size;
     const ctx = canvas.getContext('2d');
+    const c = size / 2;
 
-    // Base — deep blue-navy
-    ctx.fillStyle = '#0B1929';
+    // Radial base — light warm concrete, slightly lit at center (daytime)
+    const base = ctx.createRadialGradient(c, c, 0, c, c, size * 0.72);
+    base.addColorStop(0, '#DCE1E7');
+    base.addColorStop(0.5, '#CFD5DC');
+    base.addColorStop(0.85, '#BFC6CF');
+    base.addColorStop(1, '#B2BAC4');
+    ctx.fillStyle = base;
     ctx.fillRect(0, 0, size, size);
 
-    // Tile grid — subtle alternating tiles
-    const tileSize = 64;
-    for (let row = 0; row < size / tileSize; row++) {
-      for (let col = 0; col < size / tileSize; col++) {
+    // Alternating paver tiles — 32 cells across the 80-unit plane (2.5u tiles)
+    const cells = 32;
+    const tileSize = size / cells;
+    for (let row = 0; row < cells; row++) {
+      for (let col = 0; col < cells; col++) {
         const isAlt = (row + col) % 2 === 0;
-        ctx.fillStyle = isAlt ? 'rgba(0,180,216,0.04)' : 'rgba(0,0,0,0.06)';
+        ctx.fillStyle = isAlt ? 'rgba(255,255,255,0.05)' : 'rgba(60,80,100,0.04)';
         ctx.fillRect(col * tileSize, row * tileSize, tileSize, tileSize);
       }
     }
 
-    // Grid lines
-    ctx.strokeStyle = 'rgba(0,180,216,0.12)';
+    // Fine paver seams
+    ctx.strokeStyle = 'rgba(70,90,110,0.10)';
     ctx.lineWidth = 1;
-    for (let i = 0; i <= size; i += tileSize) {
-      ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, size); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(0, i); ctx.lineTo(size, i); ctx.stroke();
+    for (let i = 0; i <= cells; i++) {
+      const p = i * tileSize;
+      ctx.beginPath(); ctx.moveTo(p, 0); ctx.lineTo(p, size); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(0, p); ctx.lineTo(size, p); ctx.stroke();
+    }
+
+    // Major seams every 4 tiles — large-scale plaza structure
+    ctx.strokeStyle = 'rgba(70,90,110,0.14)';
+    ctx.lineWidth = 2;
+    for (let i = 0; i <= cells; i += 4) {
+      const p = i * tileSize;
+      ctx.beginPath(); ctx.moveTo(p, 0); ctx.lineTo(p, size); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(0, p); ctx.lineTo(size, p); ctx.stroke();
     }
 
     const tex = new THREE.CanvasTexture(canvas);
-    tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
-    tex.repeat.set(6, 6);
+    tex.wrapS = tex.wrapT = THREE.ClampToEdgeWrapping;
+    tex.anisotropy = 4;
     return tex;
   }, []);
 }
@@ -47,22 +68,22 @@ function useRoadTexture() {
     const canvas = document.createElement('canvas');
     canvas.width = w; canvas.height = h;
     const ctx = canvas.getContext('2d');
-    ctx.fillStyle = '#0D2A3D';
+    // Curb / shoulder
+    ctx.fillStyle = '#A6ADB6';
     ctx.fillRect(0, 0, w, h);
-    // Road surface
-    ctx.fillStyle = '#0F2235';
+    // Asphalt surface — mid gray, clearly darker than the pale plaza
+    ctx.fillStyle = '#8B929C';
     ctx.fillRect(8, 0, w - 16, h);
-    // Center glow line
-    const grad = ctx.createLinearGradient(0, 0, w, 0);
-    grad.addColorStop(0, 'transparent');
-    grad.addColorStop(0.5, 'rgba(0,255,229,0.5)');
-    grad.addColorStop(1, 'transparent');
-    ctx.fillStyle = grad;
-    ctx.fillRect(w / 2 - 3, 0, 6, h);
-    // Edge lines
-    ctx.fillStyle = 'rgba(0,180,216,0.3)';
-    ctx.fillRect(10, 0, 2, h);
-    ctx.fillRect(w - 12, 0, 2, h);
+    // White dashed center line (classic Cloud Quest road)
+    ctx.fillStyle = 'rgba(255,255,255,0.9)';
+    const dashLen = 40, gapLen = 32;
+    for (let y = 0; y < h; y += dashLen + gapLen) {
+      ctx.fillRect(w / 2 - 3, y, 6, dashLen);
+    }
+    // Solid white edge lines
+    ctx.fillStyle = 'rgba(255,255,255,0.55)';
+    ctx.fillRect(10, 0, 3, h);
+    ctx.fillRect(w - 13, 0, 3, h);
     const tex = new THREE.CanvasTexture(canvas);
     tex.wrapS = THREE.ClampToEdgeWrapping;
     tex.wrapT = THREE.RepeatWrapping;
@@ -89,17 +110,12 @@ function Road({ from, to }) {
   );
 }
 
-/** Grass/ground patch around districts */
+/** Grass lawn patch around each district */
 function DistrictGround({ district }) {
   return (
-    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[district.position[0], 0.01, district.position[2]]}>
+    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[district.position[0], 0.01, district.position[2]]} receiveShadow>
       <circleGeometry args={[5, 32]} />
-      <meshStandardMaterial
-        color={district.tileColor}
-        transparent
-        opacity={0.85}
-        roughness={0.9}
-      />
+      <meshStandardMaterial color={district.tileColor} roughness={0.95} />
     </mesh>
   );
 }
@@ -110,12 +126,12 @@ function CentralPlaza() {
     <group>
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.015, 0]}>
         <circleGeometry args={[6.5, 48]} />
-        <meshStandardMaterial color="#0D1E30" emissive="#00B4D8" emissiveIntensity={0.06} />
+        <meshStandardMaterial color="#E3E7EC" roughness={0.85} />
       </mesh>
       {[4.5, 5.5].map((r, i) => (
         <mesh key={i} rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.02, 0]}>
           <ringGeometry args={[r - 0.08, r, 48]} />
-          <meshBasicMaterial color="#00B4D8" transparent opacity={0.2 - i * 0.06} />
+          <meshBasicMaterial color="#FFFFFF" transparent opacity={0.5 - i * 0.15} />
         </mesh>
       ))}
     </group>
@@ -135,13 +151,22 @@ export default function CityGround({ onPointerDown }) {
         name="city-ground"
       >
         <planeGeometry args={[80, 80]} />
+        {/* Matte daytime concrete — texture carries all the color */}
         <meshStandardMaterial
           map={gridTex}
-          color="#AADDFF"
-          roughness={0.95}
+          color="#FFFFFF"
+          roughness={0.9}
           metalness={0.0}
         />
       </mesh>
+
+      {/* Plaza rim — subtle white boundary marking the play area */}
+      <group rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.025, 0]}>
+        <mesh>
+          <ringGeometry args={[26.7, 27.0, 96]} />
+          <meshBasicMaterial color="#FFFFFF" transparent opacity={0.45} />
+        </mesh>
+      </group>
 
       {/* Per-district ground patches */}
       {Object.values(DISTRICTS).map((d) => (

@@ -1,6 +1,6 @@
 import { Suspense, useRef, useEffect, useCallback, useState } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { PerspectiveCamera, ContactShadows, Stars } from '@react-three/drei';
+import { PerspectiveCamera, ContactShadows } from '@react-three/drei';
 import * as THREE from 'three';
 import { useGame } from '../../context/GameContext';
 import { getRankFromXp } from '../../utils/scoring';
@@ -10,7 +10,7 @@ import DistrictBuildings from './DistrictBuildings';
 import AvatarController from './AvatarController';
 import CityCamera from './CityCamera';
 import CityNPCs from './CityNPCs';
-import { CityAtmosphere, CitySparkles, HorizonGlow, DataStreamParticles, StreetLamps, CyberTrees } from './CityAtmosphere';
+import { DataStreamParticles, StreetLamps, CyberTrees } from './CityAtmosphere';
 import CityPostProcessing from './PostProcessing';
 import SceneErrorBoundary from './SceneErrorBoundary';
 import ThreatPathVisualizer from './ThreatPathVisualizer';
@@ -53,11 +53,12 @@ function CityEffect({ effect }) {
 function SceneLighting() {
   return (
     <>
-      {/* Warm directional from top-right (sun) */}
+      {/* Bright warm midday sun — the Cloud Quest look is a single strong key
+          with soft shadows and lots of bounced sky light */}
       <directionalLight
-        position={[20, 30, 15]}
-        intensity={0.9}
-        color="#FFF5E0"
+        position={[25, 38, 18]}
+        intensity={1.7}
+        color="#FFF3DE"
         castShadow
         shadow-mapSize={[2048, 2048]}
         shadow-camera-far={80}
@@ -66,14 +67,12 @@ function SceneLighting() {
         shadow-camera-top={40}
         shadow-camera-bottom={-40}
       />
-      {/* Cool blue-purple fill from left */}
-      <directionalLight position={[-15, 18, -12]} intensity={0.35} color="#6040FF" />
-      {/* Central cyan point */}
-      <pointLight position={[0, 10, 0]} intensity={0.45} color="#00FFE5" distance={45} />
-      {/* Ambient blue-white sky bounce */}
-      <ambientLight intensity={0.6} color="#C8D8F0" />
-      {/* Hemisphere sky/ground */}
-      <hemisphereLight args={['#2A4080', '#0B1929', 0.4]} />
+      {/* Soft cool sky fill from the opposite side */}
+      <directionalLight position={[-15, 18, -12]} intensity={0.35} color="#CFE0FF" />
+      {/* Bright neutral ambient — daytime scenes live on bounce light */}
+      <ambientLight intensity={0.55} color="#FFFFFF" />
+      {/* Blue sky above, light pavement bounce below */}
+      <hemisphereLight args={['#BFD9FF', '#C9CFD6', 0.6]} />
     </>
   );
 }
@@ -94,10 +93,10 @@ function FullCityScene({ onDistrictClick, onReady, onNPCInteract, controlsEnable
   }, [onReady]);
 
   useEffect(() => {
-    gl.setClearColor('#0B1929');
+    gl.setClearColor('#A9CFEE');
     gl.shadowMap.enabled = true;
     gl.shadowMap.type = THREE.PCFSoftShadowMap;
-    scene.fog = new THREE.Fog('#1A1840', 50, 100);
+    scene.fog = new THREE.Fog('#BCD8EF', 55, 140);
     fireReady();
   }, [gl, scene, fireReady]);
 
@@ -129,12 +128,6 @@ function FullCityScene({ onDistrictClick, onReady, onNPCInteract, controlsEnable
 
       <SceneLighting />
 
-      {/* Background stars */}
-      <Stars radius={130} depth={70} count={2000} factor={2.2} saturation={0.15} fade speed={0.15} />
-
-      <HorizonGlow />
-      <CitySparkles />
-
       <CityGround onPointerDown={handleGroundClick} />
       <StreetLamps />
       <CyberTrees />
@@ -156,7 +149,9 @@ function FullCityScene({ onDistrictClick, onReady, onNPCInteract, controlsEnable
         completedMissions={completedMissions}
       />
 
-      <ContactShadows position={[0, 0, 0]} opacity={0.55} scale={55} blur={2.5} far={16} resolution={256} />
+      {/* Softer/lighter now that N8AO grounds the geometry — the two combined
+          at old strength read as dirt instead of shadow */}
+      <ContactShadows position={[0, 0, 0]} opacity={0.4} scale={55} blur={3.2} far={16} resolution={512} />
 
       <CityEffect effect={state.cityEffect} />
       <DestinationMarker target={state.avatarTarget} />
@@ -212,7 +207,7 @@ export default function CyberCity({
           failIfMajorPerformanceCaveat: false,
         }}
         onCreated={({ gl }) => {
-          gl.setClearColor('#0B1929');
+          gl.setClearColor('#A9CFEE');
           handleReady();
         }}
         style={{ touchAction: 'none' }}
